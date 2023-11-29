@@ -18,8 +18,8 @@ const loginFormSchema = yup.object().shape({
 });
 
 const defaultValues: FormValues = {
-  email: "",
-  password: "",
+  email: "abc@xyz.com",
+  password: "123",
 };
 
 const Login = () => {

@@ -13,8 +13,6 @@ export class AuthController {
 
         const bcryptPassword = await bcrypt.hash(password, 10)
 
-        console.log(email, password);
-
         const user = await this.userRepository.findOne({
             where: { email }
         })
