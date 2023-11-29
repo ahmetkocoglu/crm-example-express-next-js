@@ -6,6 +6,7 @@ import { Routes } from "./routes"
 require('dotenv').config();
 import cors = require("cors")
 import jwt = require('jsonwebtoken')
+import { User } from "./entity/User"
 
 AppDataSource.initialize().then(async () => {
     // create express app
@@ -13,22 +14,26 @@ AppDataSource.initialize().then(async () => {
     app.use(bodyParser.json())
     app.use(cors({ credentials: true }))
 
-    app.all('*', (request: Request, response: Response, next: NextFunction) => {
-        console.log(request.url.endsWith('/login'));
-
+    app.all('*', async (request: Request, response: Response, next: NextFunction) => {
         if (request.url.endsWith('/login') || request.url.endsWith('/register')) {
             next()
         } else {
             try {
-                const token = request.headers.authorization
+                const token = request.headers.authorization.replace('Bearer ', '')
                 const verify = jwt.verify(token, "secret")
                 const decode: any = verify ? jwt.decode(token) : null
+                const email = decode.data.email;
 
-                console.log(verify ? '--' : '**');
-                console.log(token);
-                console.log(decode.data.email);
+                const userRepository = AppDataSource.getRepository(User)
+                const user = await userRepository.findOne({
+                    where: { email }
+                })
 
-                next()
+                if(user.confirmed === 'approval' || user.confirmed === 'email'){
+                    next()
+                } else {
+                    response.status(401).json({ status: false, message: user.confirmed })
+                }
             } catch (error: any) {
                 response.status(401).json({ status: false, message: error.message })
             }
