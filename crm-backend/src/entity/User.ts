@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, BeforeInsert, AfterInsert, BeforeUpdate, AfterUpdate, SelectQueryBuilder } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, BeforeInsert, AfterInsert, BeforeUpdate, AfterUpdate, SelectQueryBuilder, AfterLoad } from "typeorm"
 import { validateOrReject, IsDefined } from "class-validator";
 import { Phone } from "./Phone"
 import { Email } from "./Email"
@@ -44,7 +44,7 @@ export class User {
     @OneToMany(() => Address, (address) => address.user, { cascade: true })
     address: Address[]
 
-    @CreateDateColumn({select: false})
+    @CreateDateColumn({ select: false })
     createdAt: Date;
 
     @UpdateDateColumn({ nullable: true, select: false })
@@ -61,12 +61,12 @@ export class User {
     @BeforeInsert()
     async validate() {
         console.log('-----');
-        
+
         validateOrReject(this, { skipUndefinedProperties: true });
     }
 
     @AfterInsert()
-    async userLog(){
+    async userLog() {
         const logRepository = AppDataSource.getRepository(Log)
         const log = Object.assign(new Log(), {
             type: 'user',
@@ -78,9 +78,9 @@ export class User {
     }
 
     @AfterUpdate()
-    async userAfterUpdateLog(){
+    async userAfterUpdateLog() {
         console.log('----');
-        
+
         const logRepository = AppDataSource.getRepository(Log)
         const log = Object.assign(new Log(), {
             type: 'user',
@@ -91,9 +91,9 @@ export class User {
         logRepository.save(log)
     }
     @BeforeUpdate()
-    async userBeforeUpdateLog(){
+    async userBeforeUpdateLog() {
         console.log('****');
-        
+
         const logRepository = AppDataSource.getRepository(Log)
         const log = Object.assign(new Log(), {
             type: 'user',
@@ -102,5 +102,12 @@ export class User {
         })
 
         logRepository.save(log)
+    }
+
+    fullName: string;
+
+    @AfterLoad()
+    afterLoad() {
+        this.fullName = `${this.firstName} ${this.lastName}`;
     }
 }
