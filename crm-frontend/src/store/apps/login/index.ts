@@ -30,6 +30,10 @@ export const appLoginSlice = createSlice({
         handleToken: (state: any, action: PayloadAction<string>) => {
             if (getToken())
                 state.isToken = true
+        },
+        logout: (state: any) => {
+            state.isLogin = false
+            localStorage.removeItem('token')
         }
     },
     extraReducers: builder => {
@@ -37,10 +41,11 @@ export const appLoginSlice = createSlice({
             state.loading = true
         })
         builder.addCase(login.fulfilled, (state: any, action: any) => {
-            state.data = action.payload
             localStorage.setItem('token', action.payload.token)
+           
+            state.data = action.payload
+            state.isLogin = true
             state.isToken = true
-
             state.loading = false
         })
         builder.addCase(login.rejected, (state: any, action: any) => {
@@ -60,5 +65,5 @@ export const appLoginSlice = createSlice({
     }
 })
 
-export const { handleToken } = appLoginSlice.actions
+export const { handleToken, logout } = appLoginSlice.actions
 export default appLoginSlice.reducer

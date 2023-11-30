@@ -32,7 +32,6 @@ export default function Home() {
       <main
         className={`flex flex-col items-center justify-between p-10 ${inter.className}`}
       >
-        {!isToken ? <Login /> : "Giriş Yapıldı"}
         <hr />
         {loading ? "Yükleniyor" : ""}
         {data.user?.firstName} {data.user?.lastName}

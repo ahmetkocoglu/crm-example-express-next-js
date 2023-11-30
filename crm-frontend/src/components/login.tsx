@@ -6,6 +6,7 @@ import { AppDispatch } from "@/store";
 import { useForm } from "react-hook-form";
 import { login } from "@/store/apps/login";
 import Input from "./input";
+import { useRouter } from "next/router";
 
 type FormValues = {
   email: string;
@@ -37,9 +38,12 @@ const Login = () => {
     resolver: yupResolver(loginFormSchema),
   });
 
+  const router = useRouter();
+
   const onSubmit = (payload: FormValues) => {
     dispatch(login(payload));
     reset(defaultValues);
+    router.push('/')
   };
   return (
     <>
