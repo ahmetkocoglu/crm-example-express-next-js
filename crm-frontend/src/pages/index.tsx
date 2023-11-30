@@ -16,20 +16,25 @@ export default function Home() {
   const loading: boolean = useSelector(
     (state: RootState) => state.login.loading
   );
-  const isToken: boolean = useSelector((state: RootState) => state.login.isToken);
-  
+  const isToken: boolean = useSelector(
+    (state: RootState) => state.login.isToken
+  );
+
   useEffect(() => {
-    dispatch(handleToken('payload'));
-  }, [dispatch])
+    dispatch(handleToken("payload"));
+  }, [dispatch]);
 
   return (
-    <main
-      className={`flex flex-col items-center justify-between p-10 ${inter.className}`}
-    >
-      {!isToken ? <Login /> : 'Giriş Yapıldı'}
-      <hr />
-      {loading ? "Yükleniyor" : ""}
-      {data.user?.firstName} {data.user?.lastName}
-    </main>
+    <>
+    
+      <main
+        className={`flex flex-col items-center justify-between p-10 ${inter.className}`}
+      >
+        {!isToken ? <Login /> : "Giriş Yapıldı"}
+        <hr />
+        {loading ? "Yükleniyor" : ""}
+        {data.user?.firstName} {data.user?.lastName}
+      </main>
+    </>
   );
 }

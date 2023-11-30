@@ -12,17 +12,22 @@ export const login = createAsyncThunk('login', async (payload: any) => {
     return response.data
 })
 
+export const getIsLogin = createAsyncThunk('getIsLogin', async () => {
+    const response = await request.get(auth.isLogin)
+
+    return response.data
+})
+
 export const appLoginSlice = createSlice({
     name: 'getPosts',
     initialState: {
         data: {},
         loading: false,
-        isToken: false
+        isToken: false,
+        isLogin: false
     },
     reducers: {
         handleToken: (state: any, action: PayloadAction<string>) => {
-            console.log(action.payload);
-            
             if (getToken())
                 state.isToken = true
         }
@@ -40,6 +45,17 @@ export const appLoginSlice = createSlice({
         })
         builder.addCase(login.rejected, (state: any, action: any) => {
             state.loading = false
+        })
+
+        builder.addCase(getIsLogin.pending, (state: any) => {
+            state.isLogin = true
+        })
+        builder.addCase(getIsLogin.fulfilled, (state: any) => {
+            state.isLogin = true
+        })
+        builder.addCase(getIsLogin.rejected, (state: any) => {
+            localStorage.removeItem('token')
+            state.isLogin = false
         })
     }
 })

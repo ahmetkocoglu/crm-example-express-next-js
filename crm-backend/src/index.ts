@@ -29,8 +29,12 @@ AppDataSource.initialize().then(async () => {
                     where: { email }
                 })
 
-                if(user.confirmed === 'approval' || user.confirmed === 'email'){
-                    next()
+                if (user.confirmed === 'approval' || user.confirmed === 'email') {
+                    if (request.url.endsWith('/is-login')) {
+                        response.status(200).json({ status: true })
+                    } else {
+                        next()
+                    }
                 } else {
                     response.status(401).json({ status: false, message: user.confirmed })
                 }

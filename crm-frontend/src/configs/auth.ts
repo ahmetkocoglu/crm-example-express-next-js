@@ -1,3 +1,4 @@
 export const auth = {
-    login: 'login'
+    login: 'login',
+    isLogin: 'is-login'
 };
