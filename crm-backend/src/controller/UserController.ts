@@ -41,10 +41,20 @@ export class UserController {
             password
         })
 
-        const test = await this.userRepository.save(user)
-        console.log(test);
+        return await this.userRepository.save(user)
+    }
+
+    async newUser(request: Request, response: Response, next: NextFunction) {
+        const { firstName, lastName, email } = request.body;
+
+        const user = Object.assign(new User(), {
+            firstName,
+            lastName,
+            email,
+            password: (Math.random()*1000).toFixed(0)
+        })
         
-        return true
+        return await this.userRepository.save(user)
     }
 
     async update(request: Request, response: Response, next: NextFunction) {

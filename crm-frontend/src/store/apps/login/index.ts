@@ -19,7 +19,7 @@ export const getIsLogin = createAsyncThunk('getIsLogin', async () => {
 })
 
 export const appLoginSlice = createSlice({
-    name: 'getPosts',
+    name: 'auth',
     initialState: {
         data: {},
         loading: false,

@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/store';
 import { useForm } from 'react-hook-form';
 import Input from './input';
+import { addUser } from '@/store/apps/user';
 
 type FormValues = {
   firstName: string;
@@ -40,7 +41,7 @@ const AddCustomer = () => {
   });
 
   const onSubmit = (payload: FormValues) => {
-    //dispatch(login(payload));
+    dispatch(addUser(payload));
     reset(defaultValues);
   };
 
