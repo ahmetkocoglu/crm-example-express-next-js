@@ -1,8 +1,13 @@
+import Menu from '@/components/menu'
+import AddCustomer from '@/components/add-customer'
 import React from 'react'
 
 const NewCustomer = () => {
   return (
-    <div>NewCustomer</div>
+    <>
+      <Menu />
+      <AddCustomer/>
+    </>
   )
 }
 

@@ -1,8 +1,11 @@
+import Menu from '@/components/menu'
 import React from 'react'
 
 const Customer = () => {
   return (
-    <div>Customer</div>
+    <>
+      <Menu />
+    </>
   )
 }
 
