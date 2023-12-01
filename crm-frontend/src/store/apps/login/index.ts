@@ -53,7 +53,7 @@ export const appLoginSlice = createSlice({
         })
 
         builder.addCase(getIsLogin.pending, (state: any) => {
-            state.isLogin = true
+            //state.isLogin = false
         })
         builder.addCase(getIsLogin.fulfilled, (state: any) => {
             state.isLogin = true

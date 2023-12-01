@@ -30,7 +30,7 @@ export function AuthProvider({ children }: Props) {
 
   useEffect(() => {
     dispatch(getIsLogin());
-  }, [dispatch]);
+  }, [dispatch, router]);
 
   const sharedData = "Context API Kullanımı";
 
