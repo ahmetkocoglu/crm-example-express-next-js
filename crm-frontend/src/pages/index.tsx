@@ -28,13 +28,21 @@ export default function Home() {
 
   return (
     <>
-      <Menu/>
-      <main
-        className={`flex flex-col items-center justify-between p-10 ${inter.className}`}
-      >
-        <hr />
-        {loading ? "Yükleniyor" : ""}
-        {data.user?.firstName} {data.user?.lastName}
+      <Menu />
+      <main className={`max-w-7xl mx-auto ${inter.className}`}>
+        <div className="flex flex-wrap py-28 text-center">
+          <div className="w-full md:w-1/4 px-3">
+            <Link href="/new-customer">Yeni Müşteri</Link>
+          </div>
+          <div className="w-full md:w-1/4 px-3">
+            <Link href="/customer">Müşteriler</Link></div>
+          <div className="w-full md:w-1/4 px-3 whitespace-nowrap">
+            <Link href="new-meeting">Yeni Toplatı/Görüşme</Link>
+          </div>
+          <div className="w-full md:w-1/4 px-3">
+            <Link href="/calender">Takvim</Link>
+            </div>
+        </div>
       </main>
     </>
   );
