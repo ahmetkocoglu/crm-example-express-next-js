@@ -18,11 +18,16 @@ export class AuthController {
         })
 
         if (!user) {
-            return "unregistered user => " + bcryptPassword
+            return "unregistered user => "
         }
+        console.log('user >> ', user);
 
         const isValid = await bcrypt.compare(password, user.password)
+
+        console.log('isValid >> ', isValid);
+
         if (isValid) {
+            console.log('isValid into >> ', isValid);
             const loginUser = {
                 firstName: user.firstName,
                 lastName: user.lastName,
@@ -38,7 +43,9 @@ export class AuthController {
 
             return { status: true, token, user: loginUser }
         }
-        else
-            return response.status(401).json({ status: false })
+        else {
+            const error: any = new Error("Geçersiz login bilgisi")
+            next(error)
+        }
     }
 }

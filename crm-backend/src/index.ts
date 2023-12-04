@@ -55,10 +55,14 @@ AppDataSource.initialize().then(async () => {
         })
     })
 
-    app.use((error: ErrorRequestHandler, request: Request, response: Response, next: NextFunction) => {
-        console.log(error)
-        response.status(404).json('test işlemi')
-    })
+    app.use((error: any, request: Request, response: Response, next: NextFunction) => {
+        return response.status(500).json({
+            status: false, 
+            code: error.code, 
+            errno: error.errno, 
+            message: error.message
+        })
+     })
 
     // start express server
     app.listen(process.env.PORT)
