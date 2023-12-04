@@ -24,10 +24,7 @@ export class AuthController {
 
         const isValid = await bcrypt.compare(password, user.password)
 
-        console.log('isValid >> ', isValid);
-
         if (isValid) {
-            console.log('isValid into >> ', isValid);
             const loginUser = {
                 firstName: user.firstName,
                 lastName: user.lastName,
