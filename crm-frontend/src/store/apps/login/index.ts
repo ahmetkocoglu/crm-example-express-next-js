@@ -3,17 +3,17 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import { auth } from '@/configs/auth'
 
 // ** Utils
-import request from '@/utils/request'
+import axiosServices from '@/utils/axios-services'
 import { getToken } from '@/utils/get-token'
 
 export const login = createAsyncThunk('login', async (payload: any) => {
-    const response = await request.post(auth.login, payload)
+    const response = await axiosServices.post(auth.login, payload)
 
     return response.data
 })
 
 export const getIsLogin = createAsyncThunk('getIsLogin', async () => {
-    const response = await request.get(auth.isLogin)
+    const response = await axiosServices.get(auth.isLogin)
 
     return response.data
 })

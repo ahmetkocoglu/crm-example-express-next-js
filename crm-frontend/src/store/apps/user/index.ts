@@ -5,7 +5,7 @@ import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
 import {user} from '@/configs/user'
 
 // ** Utils
-import request from '@/utils/request'
+import request from '@/utils/axios-services'
 
 export const addUser = createAsyncThunk('add/user', async (payload: any) => {
     const response = await request.post(user.newUser, payload)

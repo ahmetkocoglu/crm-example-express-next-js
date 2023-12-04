@@ -1,7 +1,7 @@
 import axios from "axios";
 import { base } from '@/configs/base'
 
-const request = axios.create({
+const axiosServices = axios.create({
     baseURL: base.base,
     timeout: 30000,
     headers: {
@@ -10,7 +10,7 @@ const request = axios.create({
     }
 })
 
-request.interceptors.request.use((config: any) => {
+axiosServices.interceptors.request.use((config: any) => {
     const token = localStorage.getItem('token')
     config.headers = {
         ...config.headers,
@@ -22,4 +22,4 @@ request.interceptors.request.use((config: any) => {
     return Promise.reject(error)
 })
 
-export default request
+export default axiosServices
