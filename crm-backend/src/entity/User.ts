@@ -1,11 +1,12 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, BeforeInsert, AfterInsert, BeforeUpdate, AfterUpdate, SelectQueryBuilder, AfterLoad } from "typeorm"
-import { validateOrReject, IsDefined } from "class-validator";
+import { validateOrReject, IsDefined, IsEmail, Length } from "class-validator";
 import { Phone } from "./Phone"
 import { Email } from "./Email"
 import { Address } from "./Address"
 import * as bcrypt from 'bcrypt';
 import { AppDataSource } from "../data-source";
 import { Log } from "./Log";
+import { error } from "console";
 
 enum role { ADMIN = 'admin', USER = 'user', CUSTOMER = 'customer' };
 enum confirmed { PENDING = 'pending', EMAIL = 'email', APPROVAL = 'approval', DENIED = 'denied' };
@@ -18,12 +19,16 @@ export class User {
 
     @Column({ type: 'varchar', length: 100, nullable: false })
     @IsDefined({ message: 'isim gerekli' })
-    firstName!: string
+    @Length(3, 100)
+     firstName!: string
 
     @Column({ type: 'varchar', length: 100, nullable: false })
+    @IsDefined({ message: 'soyad gerekli' })
+    @Length(3, 100)
     lastName: string
 
     @Column({ type: 'varchar', length: 100, unique: true })
+    @IsEmail()
     email: string
 
     @Column({ type: 'varchar', length: 100 })
@@ -60,9 +65,9 @@ export class User {
 
     @BeforeInsert()
     async validate() {
-        console.log('-----');
-
-        validateOrReject(this, { skipUndefinedProperties: true });
+        await validateOrReject(this, { skipUndefinedProperties: true });
+        // Check if license already exists
+        throw new Error('BROKEN')
     }
 
     @AfterInsert()

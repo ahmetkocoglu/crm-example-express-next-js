@@ -41,4 +41,28 @@ export class AuthController {
             next({ error, status: 401 })
         }
     }
+    async register(request: Request, response: Response, next: NextFunction) {
+        const { firstName, lastName, email, password } = request.body;
+
+        const user = Object.assign(new User(), {
+            firstName,
+            lastName,
+            email,
+            password
+        })
+
+
+        try {
+            const insert = await this.userRepository.save(user)
+            return "success";
+        } catch (error: any) {
+            console.log('error >>> ', error);
+
+            error.message = error.map((k: any) => {
+                return { constraints: k.constraints, property: k.property }
+            })
+
+            next({ error, status: 404 })
+        }
+    }
 }
