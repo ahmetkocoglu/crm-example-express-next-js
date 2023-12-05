@@ -11,38 +11,34 @@ export class AuthController {
     async login(request: Request, response: Response, next: NextFunction) {
         const { email, password } = request.body;
 
-        const bcryptPassword = await bcrypt.hash(password, 10)
-
         const user = await this.userRepository.findOne({
             where: { email }
         })
 
-        if (!user) {
-            return "unregistered user => "
-        }
-        console.log('user >> ', user);
+        if (user) {
+            const isValid = await bcrypt.compare(password, user.password)
+            if (isValid) {
+                const loginUser = {
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    email: user.email,
+                    role: user.role,
+                    confirmed: user.confirmed
+                }
 
-        const isValid = await bcrypt.compare(password, user.password)
+                const token = jwt.sign({
+                    exp: Math.floor(Date.now() / 1000) + 60 * 60,
+                    data: loginUser,
+                }, "secret")
 
-        if (isValid) {
-            const loginUser = {
-                firstName: user.firstName,
-                lastName: user.lastName,
-                email: user.email,
-                role: user.role,
-                confirmed: user.confirmed
+                return { status: true, token, user: loginUser }
+            } else {
+                const error: any = new Error("email ve/veya şifre geçersiz")
+                next({ error, status: 401 })
             }
-
-            const token = jwt.sign({
-                exp: Math.floor(Date.now() / 1000) + 60 * 60,
-                data: loginUser,
-            }, "secret")
-
-            return { status: true, token, user: loginUser }
-        }
-        else {
-            const error: any = new Error("Geçersiz login bilgisi")
-            next(error)
+        } else {
+            const error: any = new Error("email ve/veya şifre geçersiz")
+            next({ error, status: 401 })
         }
     }
 }

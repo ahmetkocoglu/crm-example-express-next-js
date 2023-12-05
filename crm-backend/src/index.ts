@@ -45,7 +45,7 @@ AppDataSource.initialize().then(async () => {
     })
     // register express routes from defined application routes
     Routes.forEach(route => {
-        (app as any)[route.method](`/api/v1${route.route}`, (req: Request, res: Response, next: Function) => {
+        (app as any)[route.method](`/api/v1${route.route}`, async (req: Request, res: Response, next: Function) => {
             const result = (new (route.controller as any))[route.action](req, res, next)
             if (result instanceof Promise) {
                 result.then(result => result !== null && result !== undefined ? res.send(result) : undefined)
@@ -56,11 +56,11 @@ AppDataSource.initialize().then(async () => {
     })
 
     app.use((error: any, request: Request, response: Response, next: NextFunction) => {
-        return response.status(500).json({
+        return response.status(error.status).json({
             status: false, 
-            code: error.code, 
-            errno: error.errno, 
-            message: error.message
+            code: error.error.code, 
+            errno: error.error.errno, 
+            message: error.error.message
         })
      })
 
