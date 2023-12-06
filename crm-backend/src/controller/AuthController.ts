@@ -51,16 +51,14 @@ export class AuthController {
             password
         })
 
-
         try {
-            const insert = await this.userRepository.save(user)
-            return "success";
+            return await this.userRepository.save(user)
         } catch (error: any) {
-            console.log('error >>> ', error);
-
-            error.message = error.map((k: any) => {
-                return { constraints: k.constraints, property: k.property }
-            })
+            if(error.code === undefined){
+                error.message = error.map((k: any) => {
+                    return { constraints: k.constraints, property: k.property }
+                })
+            }
 
             next({ error, status: 404 })
         }

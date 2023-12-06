@@ -29,6 +29,7 @@ export class User {
 
     @Column({ type: 'varchar', length: 100, unique: true })
     @IsEmail()
+    @Length(3, 100)
     email: string
 
     @Column({ type: 'varchar', length: 100 })
@@ -66,8 +67,6 @@ export class User {
     @BeforeInsert()
     async validate() {
         await validateOrReject(this, { skipUndefinedProperties: true });
-        // Check if license already exists
-        throw new Error('BROKEN')
     }
 
     @AfterInsert()
