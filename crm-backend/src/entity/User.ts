@@ -6,7 +6,6 @@ import { Address } from "./Address"
 import * as bcrypt from 'bcrypt';
 import { AppDataSource } from "../data-source";
 import { Log } from "./Log";
-import { error } from "console";
 
 enum role { ADMIN = 'admin', USER = 'user', CUSTOMER = 'customer' };
 enum confirmed { PENDING = 'pending', EMAIL = 'email', APPROVAL = 'approval', DENIED = 'denied' };
@@ -51,13 +50,13 @@ export class User {
     @OneToMany(() => Address, (address) => address.user, { cascade: true })
     address: Address[]
 
-    @CreateDateColumn({ select: false })
+    @CreateDateColumn({ select: true })
     createdAt: Date;
 
-    @UpdateDateColumn({ nullable: true, select: false })
+    @UpdateDateColumn({ nullable: true, select: true })
     updateAt: Date;
 
-    @DeleteDateColumn({ nullable: true, select: false })
+    @DeleteDateColumn({ nullable: true, select: true })
     deletedAt: Date;
 
     @BeforeInsert()
