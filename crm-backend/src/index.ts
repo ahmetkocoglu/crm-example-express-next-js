@@ -56,7 +56,6 @@ AppDataSource.initialize().then(async () => {
     })
 
     app.use((error: any, request: Request, response: Response, next: NextFunction) => {
-        //return response.status(404).json(error)
         return response.status(error.status).json({
             status: false, 
             code: error.error.code, 
