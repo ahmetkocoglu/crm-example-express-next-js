@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, BeforeInsert, AfterInsert, BeforeUpdate, AfterUpdate, SelectQueryBuilder, AfterLoad } from "typeorm"
-import { validateOrReject, IsDefined, IsEmail, Length } from "class-validator";
+import { validateOrReject, IsDefined, IsEmail, Length, Max } from "class-validator";
 import { Phone } from "./Phone"
 import { Email } from "./Email"
 import { Address } from "./Address"
@@ -29,7 +29,7 @@ export class User {
 
     @Column({ type: 'varchar', length: 100, unique: true })
     @IsEmail()
-    @Length(3, 100)
+    @Max(100)
     email: string
 
     @Column({ type: 'varchar', length: 100 })
