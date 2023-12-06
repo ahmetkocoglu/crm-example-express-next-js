@@ -29,7 +29,6 @@ export class User {
 
     @Column({ type: 'varchar', length: 100, unique: true })
     @IsEmail()
-    @Max(100)
     email: string
 
     @Column({ type: 'varchar', length: 100 })
