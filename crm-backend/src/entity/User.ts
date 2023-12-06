@@ -32,6 +32,8 @@ export class User {
     email: string
 
     @Column({ type: 'varchar', length: 100 })
+    @IsDefined({ message: 'şifre gerekli' })
+    @Length(6, 10)
     password: string
 
     @Column({ type: "enum", enum: role, default: role.USER, nullable: false })
