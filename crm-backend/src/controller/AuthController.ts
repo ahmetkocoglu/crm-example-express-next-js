@@ -7,6 +7,7 @@ import { UserModel } from "../model/UserModel";
 import { RegisterModel } from "../model/RegisterModel";
 import { LoginModel } from "../model/LoginModel";
 import { ResponseLoginModel } from "../model/ResponseLoginModel";
+import { getUserFromJWT } from "../utility/getUserIdFromJWT";
 
 export class AuthController {
 
@@ -46,7 +47,7 @@ export class AuthController {
         }
     }
     async register(request: Request, response: Response, next: NextFunction) {
-        const {firstName, lastName, email, password}: RegisterModel  = request.body;
+        const { firstName, lastName, email, password }: RegisterModel = request.body;
         // const {firstName, lastName, email, password}  = request.body as RegisterModel;
 
         const user = Object.assign(new User(), {
@@ -67,7 +68,6 @@ export class AuthController {
 
         try {
             const insert = await this.userRepository.save(user)
-            console.log(insert);
 
             return {
                 firstName: insert.firstName,
@@ -77,12 +77,42 @@ export class AuthController {
                 confirmed: insert.confirmed,
             } as UserModel
         } catch (error: any) {
-            if(error.code === undefined){
+            if (error.code === undefined) {
                 error.message = error.map((k: any) => {
                     return { constraints: k.constraints, property: k.property }
                 })
             }
 
+            next({ error, status: 404 })
+        }
+    }
+    async update(request: Request, response: Response, next: NextFunction) {
+        const user: any = await getUserFromJWT(request)
+
+        const id = user.id
+        const { firstName, lastName }: RegisterModel = request.body;
+
+        try {
+            const update = await this.userRepository.update({ id }, { firstName, lastName })
+            return { status: true, update }
+        } catch (error: any) {
+            next({ error, status: 404 })
+        }
+    }
+    async changePassword(request: Request, response: Response, next: NextFunction) {
+        const user: any = await getUserFromJWT(request)
+        
+        const id = user.id
+        const { oldPassword, newPassword } = request.body;
+
+        const isValid = await bcrypt.compare(oldPassword, user.password)
+
+        if (isValid) {
+        const newPasswordBcrypt = await bcrypt.hash(newPassword, 10)
+        const update = await this.userRepository.update({ id }, { password: newPasswordBcrypt })
+            return { status: true, update }
+        } else {
+            const error: any = new Error("şifre geçersiz")
             next({ error, status: 404 })
         }
     }

@@ -19,7 +19,7 @@ export class User {
     @Column({ type: 'varchar', length: 100, nullable: false })
     @IsDefined({ message: 'isim gerekli' })
     @Length(3, 100)
-     firstName!: string
+    firstName!: string
 
     @Column({ type: 'varchar', length: 100, nullable: false })
     @IsDefined({ message: 'soyad gerekli' })

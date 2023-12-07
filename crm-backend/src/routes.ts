@@ -41,4 +41,14 @@ export const Routes = [{
     route: "/register",
     controller: AuthController,
     action: "register"
+}, {
+    method: "put",
+    route: "/user/update",
+    controller: AuthController,
+    action: "update"
+}, {
+    method: "put",
+    route: "/user/change-password",
+    controller: AuthController,
+    action: "changePassword"
 }]

@@ -5,8 +5,7 @@ import { AppDataSource } from "./data-source"
 import { Routes } from "./routes"
 require('dotenv').config();
 import cors = require("cors")
-import jwt = require('jsonwebtoken')
-import { User } from "./entity/User"
+import { getUserFromJWT } from "./utility/getUserIdFromJWT"
 
 AppDataSource.initialize().then(async () => {
     // create express app
@@ -19,15 +18,7 @@ AppDataSource.initialize().then(async () => {
             next()
         } else {
             try {
-                const token = request.headers.authorization.replace('Bearer ', '')
-                const verify = jwt.verify(token, "secret")
-                const decode: any = verify ? jwt.decode(token) : null
-                const email = decode.data.email;
-
-                const userRepository = AppDataSource.getRepository(User)
-                const user = await userRepository.findOne({
-                    where: { email }
-                })
+                const user: any = await getUserFromJWT(request)
 
                 if (user.confirmed === 'approval' || user.confirmed === 'email') {
                     if (request.url.endsWith('/is-login')) {
