@@ -8,6 +8,7 @@ import { RegisterModel } from "../model/RegisterModel";
 import { LoginModel } from "../model/LoginModel";
 import { ResponseLoginModel } from "../model/ResponseLoginModel";
 import { getUserFromJWT } from "../utility/getUserIdFromJWT";
+import { newUser } from "../utility/new-user";
 
 export class AuthController {
 
@@ -47,15 +48,16 @@ export class AuthController {
         }
     }
     async register(request: Request, response: Response, next: NextFunction) {
-        const { firstName, lastName, email, password }: RegisterModel = request.body;
+        //const { firstName, lastName, email, password }: RegisterModel = request.body;
+        
         // const {firstName, lastName, email, password}  = request.body as RegisterModel;
 
-        const user = Object.assign(new User(), {
-            firstName,
-            lastName,
-            email,
-            password
-        })
+        // const user = Object.assign(new User(), {
+        //     firstName,
+        //     lastName,
+        //     email,
+        //     password
+        // })
 
         // const body: RegisterModel = request.body;
 
@@ -66,24 +68,41 @@ export class AuthController {
         //     password: body.password
         // })
 
-        try {
-            const insert = await this.userRepository.save(user)
+        // try {
+        //     const insert = await this.userRepository.save(user)
 
-            return {
-                firstName: insert.firstName,
-                lastName: insert.lastName,
-                email: insert.email,
-                role: insert.role,
-                confirmed: insert.confirmed,
+        //     return {
+        //         firstName: insert.firstName,
+        //         lastName: insert.lastName,
+        //         email: insert.email,
+        //         role: insert.role,
+        //         confirmed: insert.confirmed,
+        //     } as UserModel
+        // } catch (error: any) {
+        //     if (error.code === undefined) {
+        //         error.message = error.map((k: any) => {
+        //             return { constraints: k.constraints, property: k.property }
+        //         })
+        //     }
+
+        //     next({ error, status: 404 })
+        // }
+
+        
+        const body: RegisterModel = request.body;
+        
+        const {res, status} = await newUser(body)
+
+        if (status) {
+                return {
+                firstName: res.firstName,
+                lastName: res.lastName,
+                email: res.email,
+                role: res.role,
+                confirmed: res.confirmed,
             } as UserModel
-        } catch (error: any) {
-            if (error.code === undefined) {
-                error.message = error.map((k: any) => {
-                    return { constraints: k.constraints, property: k.property }
-                })
-            }
-
-            next({ error, status: 404 })
+        } else {
+            next({ error: res, status: 404 })
         }
     }
     async update(request: Request, response: Response, next: NextFunction) {

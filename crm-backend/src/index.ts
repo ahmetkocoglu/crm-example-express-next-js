@@ -14,6 +14,7 @@ AppDataSource.initialize().then(async () => {
     app.use(cors({ credentials: true }))
 
     app.all('*', async (request: Request, response: Response, next: NextFunction) => {
+        console.log('bir istek yapıldı');
         if (request.url.endsWith('/login') || request.url.endsWith('/register')) {
             next()
         } else {
@@ -27,7 +28,7 @@ AppDataSource.initialize().then(async () => {
                         next()
                     }
                 } else {
-                    response.status(401).json({ status: false, message: user.confirmed })
+                    response.status(401).json({ status: false, message: 'yetkilendirme hatası. lütfen yöneticiye danışın' })
                 }
             } catch (error: any) {
                 response.status(401).json({ status: false, message: error.message })

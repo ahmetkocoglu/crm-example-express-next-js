@@ -21,7 +21,7 @@ export class UserController {
             } as UserModel
         })
 
-        return {status: true, users}
+        return { status: true, users }
     }
 
     async one(request: Request, response: Response, next: NextFunction) {
@@ -37,13 +37,14 @@ export class UserController {
         return {
             status: true,
             user: {
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            role: user.role,
-            confirmed: user.confirmed,
-            createdAt: user.createdAt
-        } as UserModel}
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                role: user.role,
+                confirmed: user.confirmed,
+                createdAt: user.createdAt
+            } as UserModel
+        }
     }
 
     async save(request: Request, response: Response, next: NextFunction) {
@@ -66,13 +67,18 @@ export class UserController {
             firstName,
             lastName,
             email,
-            password: (Math.random()*1000).toFixed(0)
+            password: (Math.random() * 1000000).toFixed(0)
         })
-        
+
         try {
             return await this.userRepository.save(user)
         } catch (error) {
-            next(error)
+            if (error.code === undefined) {
+                error.message = error.map((k: any) => {
+                    return { constraints: k.constraints, property: k.property }
+                })
+            }
+            next({ error, status: 404 })
         }
     }
 
