@@ -101,15 +101,15 @@ export class AuthController {
     }
     async changePassword(request: Request, response: Response, next: NextFunction) {
         const user: any = await getUserFromJWT(request)
-        
+
         const id = user.id
         const { oldPassword, newPassword } = request.body;
 
         const isValid = await bcrypt.compare(oldPassword, user.password)
 
         if (isValid) {
-        const newPasswordBcrypt = await bcrypt.hash(newPassword, 10)
-        const update = await this.userRepository.update({ id }, { password: newPasswordBcrypt })
+            const newPasswordBcrypt = await bcrypt.hash(newPassword, 10)
+            const update = await this.userRepository.update({ id }, { password: newPasswordBcrypt })
             return { status: true, update }
         } else {
             const error: any = new Error("şifre geçersiz")
