@@ -1,4 +1,5 @@
 import { AuthController } from "./controller/AuthController"
+import { PhoneController } from "./controller/PhoneController"
 import { UserController } from "./controller/UserController"
 
 export const Routes = [{
@@ -51,4 +52,19 @@ export const Routes = [{
     route: "/user/change-password",
     controller: AuthController,
     action: "changePassword"
+}, {
+    method: "get",
+    route: "/phones",
+    controller: PhoneController,
+    action: "all"
+}, {
+    method: "post",
+    route: "/phones",
+    controller: PhoneController,
+    action: "save"
+}, {
+    method: "put",
+    route: "/phones/:id",
+    controller: PhoneController,
+    action: "update"
 }]

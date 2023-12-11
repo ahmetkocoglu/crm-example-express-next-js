@@ -3,7 +3,7 @@ import { User } from "./User"
 import { AppDataSource } from "../data-source"
 import { Log } from "./Log"
 
-enum type { HOME = 'ev', CENTER = 'centre', BRANCH = 'branch' };
+enum type { HOME = 'home', CENTER = 'centre', BRANCH = 'branch' };
 
 @Entity("phones")
 export class Phone {

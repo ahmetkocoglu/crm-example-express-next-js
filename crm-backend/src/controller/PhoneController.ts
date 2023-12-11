@@ -7,7 +7,9 @@ export class PhoneController {
     private phoneRepository = AppDataSource.getRepository(Phone)
 
     async all(request: Request, response: Response, next: NextFunction) {
-        return this.phoneRepository.find()
+        const phones = this.phoneRepository.find()
+
+        return { data: phones, status: true }
     }
 
     async one(request: Request, response: Response, next: NextFunction) {
@@ -24,22 +26,36 @@ export class PhoneController {
     }
 
     async save(request: Request, response: Response, next: NextFunction) {
-        const {  } = request.body;
+        const { userId, phoneType, phoneNumber } = request.body;
 
         const phone = Object.assign(new Phone(), {
-           
+            user: userId,
+            phoneType,
+            phoneNumber
         })
 
-        return await this.phoneRepository.save(phone)
+        try {
+            const insert = await this.phoneRepository.save(phone)
+            return { data: insert, status: true }
+        } catch (error) {
+            next({ error, status: 404 })
+        }
     }
 
     async update(request: Request, response: Response, next: NextFunction) {
         const id = parseInt(request.params.id)
-        const { } = request.body;
+        const { userId, phoneType, phoneNumber } = request.body;
 
-        return await this.phoneRepository.update({ id }, {
-            
-        })
+        try {
+            const update = await this.phoneRepository.update({ id }, {
+                user: userId,
+                phoneType,
+                phoneNumber
+            })
+            return { data: update, status: update.affected > 0 }
+        } catch (error) {
+            next({ error, status: 404 })
+        }
     }
 
     async remove(request: Request, response: Response, next: NextFunction) {

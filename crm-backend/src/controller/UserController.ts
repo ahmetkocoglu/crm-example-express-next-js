@@ -21,7 +21,7 @@ export class UserController {
             } as UserModel
         })
 
-        return { status: true, users }
+        return { status: true, data: users }
     }
 
     async one(request: Request, response: Response, next: NextFunction) {
@@ -36,7 +36,7 @@ export class UserController {
         }
         return {
             status: true,
-            user: {
+            data: {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,
@@ -71,7 +71,15 @@ export class UserController {
         })
 
         try {
-            return await this.userRepository.save(user)
+            const insert = await this.userRepository.save(user);
+            return { data: {
+                firstName: insert.firstName,
+                lastName: insert.lastName,
+                email: insert.email,
+                role: insert.role,
+                confirmed: insert.confirmed,
+                createdAt: insert.createdAt
+            } as UserModel, status: true }
         } catch (error) {
             if (error.code === undefined) {
                 error.message = error.map((k: any) => {
@@ -86,10 +94,11 @@ export class UserController {
         const id = parseInt(request.params.id)
         const { firstName, lastName } = request.body;
 
-        return await this.userRepository.update({ id }, {
+        const update = await this.userRepository.update({ id }, {
             firstName,
             lastName
         })
+        return { update, status: true }
     }
 
     async remove(request: Request, response: Response, next: NextFunction) {
@@ -103,7 +112,7 @@ export class UserController {
 
         await this.userRepository.remove(userToRemove)
 
-        return "user has been removed"
-    }
+        return { message: "user has been removed", status: true }
+     }
 
 }

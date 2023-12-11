@@ -19,7 +19,7 @@ export class Log {
     @Column({ type: 'varchar', length: 200, nullable: false })
     process: string
 
-    @ManyToOne(() => User, (user) => user.id, {nullable: false})
+    @ManyToOne(() => User, (user) => user.id, {onDelete: 'CASCADE', nullable: false})
     @JoinColumn({ name: "userId" })
     user: User
 
