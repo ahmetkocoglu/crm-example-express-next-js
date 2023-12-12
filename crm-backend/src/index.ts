@@ -8,6 +8,7 @@ import cors = require("cors")
 import { getUserFromJWT } from "./utility/getUserIdFromJWT"
 
 AppDataSource.initialize().then(async () => {
+    // test
     // create express app
     const app = express()
     app.use(bodyParser.json())
