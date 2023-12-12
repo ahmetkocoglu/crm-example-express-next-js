@@ -1,45 +1,73 @@
 import { AppDataSource } from "../data-source"
 import { NextFunction, Request, Response } from "express"
 import { Email } from "../entity/Email"
+import { EmailModel } from "../model/EmailModel"
 
 export class EmailController {
 
     private emailRepository = AppDataSource.getRepository(Email)
 
     async all(request: Request, response: Response, next: NextFunction) {
-        return this.emailRepository.find()
+        const email: EmailModel[] = await this.emailRepository.find({
+            select: {
+                id: true,
+                emailType: true,
+                emailAddress: true
+            }
+        })
+
+        return { data: email, status: true }
     }
 
     async one(request: Request, response: Response, next: NextFunction) {
         const id = parseInt(request.params.id)
 
         const email = await this.emailRepository.findOne({
-            where: { id }
+            where: { id },
+            select: {
+                id: true,
+                emailType: true,
+                emailAddress: true
+            }
         })
 
         if (!email) {
-            return "unregistered email"
+            return { message: "unregistered email", status: false }
         }
-        return email
+        return { data: email, status: true }
     }
 
     async save(request: Request, response: Response, next: NextFunction) {
-        const {  } = request.body;
+        const { userId, emailType, emailAddress } = request.body;
 
         const email = Object.assign(new Email(), {
-           
+            user: userId,
+            emailType,
+            emailAddress
         })
 
-        return await this.emailRepository.save(email)
+        try {
+            const insert = await this.emailRepository.save(email)
+            return { data: insert, status: true }
+        } catch (error) {
+            next({ error, status: 404 })
+        }
     }
 
     async update(request: Request, response: Response, next: NextFunction) {
         const id = parseInt(request.params.id)
-        const { } = request.body;
+        const { userId, emailType, emailAddress } = request.body;
 
-        return await this.emailRepository.update({ id }, {
-            
-        })
+        try {
+            const update = await this.emailRepository.update({ id }, {
+                user: userId,
+                emailType,
+                emailAddress
+            })
+            return { data: update, status: true }
+        } catch (error) {
+            next({ error, status: 404 })
+        }
     }
 
     async remove(request: Request, response: Response, next: NextFunction) {
@@ -48,12 +76,11 @@ export class EmailController {
         let emailToRemove = await this.emailRepository.findOneBy({ id })
 
         if (!emailToRemove) {
-            return "this email not exist"
+            return { message: "this email not exist", status: false }
         }
 
         await this.emailRepository.remove(emailToRemove)
 
-        return "email has been removed"
+        return { message: "email has been removed", status: true }
     }
-
 }

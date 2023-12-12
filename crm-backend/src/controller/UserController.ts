@@ -107,7 +107,7 @@ export class UserController {
         let userToRemove = await this.userRepository.findOneBy({ id })
 
         if (!userToRemove) {
-            return "this user not exist"
+        return { message: "this user not exist", status: false }
         }
 
         await this.userRepository.remove(userToRemove)

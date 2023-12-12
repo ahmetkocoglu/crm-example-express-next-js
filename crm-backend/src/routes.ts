@@ -1,4 +1,6 @@
+import { AddressController } from "./controller/AddressController";
 import { AuthController } from "./controller/AuthController"
+import { EmailController } from "./controller/EmailController";
 import { PhoneController } from "./controller/PhoneController"
 import { UserController } from "./controller/UserController"
 
@@ -58,6 +60,11 @@ export const Routes = [{
     controller: PhoneController,
     action: "all"
 }, {
+    method: "get",
+    route: "/phones/:id",
+    controller: PhoneController,
+    action: "one"
+}, {
     method: "post",
     route: "/phones",
     controller: PhoneController,
@@ -67,4 +74,59 @@ export const Routes = [{
     route: "/phones/:id",
     controller: PhoneController,
     action: "update"
-}]
+}, {
+    method: "delete",
+    route: "/phones/:id",
+    controller: PhoneController,
+    action: "remove"
+}, {
+    method: "get",
+    route: "/email",
+    controller: EmailController,
+    action: "all"
+}, {
+    method: "get",
+    route: "/email/:id",
+    controller: EmailController,
+    action: "one"
+}, {
+    method: "post",
+    route: "/email",
+    controller: EmailController,
+    action: "save"
+}, {
+    method: "put",
+    route: "/email/:id",
+    controller: EmailController,
+    action: "update"
+}, {
+    method: "delete",
+    route: "/email/:id",
+    controller: EmailController,
+    action: "remove"
+}, {
+    method: "get",
+    route: "/addresses",
+    controller: AddressController,
+    action: "all"
+}, {
+    method: "get",
+    route: "/addresses/:id",
+    controller: AddressController,
+    action: "one"
+}, {
+    method: "post",
+    route: "/addresses",
+    controller: AddressController,
+    action: "save"
+}, {
+    method: "put",
+    route: "/addresses/:id",
+    controller: AddressController,
+    action: "update"
+}, {
+    method: "delete",
+    route: "/addresses/:id",
+    controller: AddressController,
+    action: "remove"
+}];

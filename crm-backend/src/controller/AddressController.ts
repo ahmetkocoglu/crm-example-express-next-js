@@ -1,45 +1,77 @@
 import { AppDataSource } from "../data-source"
 import { NextFunction, Request, Response } from "express"
 import { Address } from "../entity/Address"
+import { AddressModel } from "../model/AddressModel"
 
 export class AddressController {
 
     private addressRepository = AppDataSource.getRepository(Address)
 
     async all(request: Request, response: Response, next: NextFunction) {
-        return this.addressRepository.find()
+        const addresses: AddressModel[] = await this.addressRepository.find({
+            select: {
+                id: true,
+                ContactType: true,
+                addressLine: true,
+                location: true
+            }
+        })
+
+        return { data: addresses, status: true }
     }
 
     async one(request: Request, response: Response, next: NextFunction) {
         const id = parseInt(request.params.id)
 
         const address = await this.addressRepository.findOne({
-            where: { id }
+            where: { id },
+            select: {
+                id: true,
+                ContactType: true,
+                addressLine: true,
+                location: true
+            }
         })
 
         if (!address) {
-            return "unregistered address"
+            return { message: "unregistered address", status: false }
         }
-        return address
+        return { data: address, status: true }
     }
 
     async save(request: Request, response: Response, next: NextFunction) {
-        const {  } = request.body;
+        const { userId, ContactType, addressLine, location } = request.body;
 
         const address = Object.assign(new Address(), {
-           
+            user: userId,
+            ContactType,
+            addressLine,
+            location
         })
 
-        return await this.addressRepository.save(address)
+        try {
+            const insert = await this.addressRepository.save(address)
+            return { data: insert, status: true }
+        } catch (error) {
+            next({ error, status: false })
+        }
     }
 
     async update(request: Request, response: Response, next: NextFunction) {
         const id = parseInt(request.params.id)
-        const { } = request.body;
+        const { userId, ContactType, addressLine, location } = request.body;
 
-        return await this.addressRepository.update({ id }, {
-            
-        })
+        try {
+            const update = await this.addressRepository.update({ id }, {
+                user: userId,
+                ContactType,
+                addressLine,
+                location
+            })
+            return { data: update, status: true }
+        } catch (error) {
+            next({ error, status: 404 })
+        }
     }
 
     async remove(request: Request, response: Response, next: NextFunction) {
@@ -48,12 +80,11 @@ export class AddressController {
         let addressToRemove = await this.addressRepository.findOneBy({ id })
 
         if (!addressToRemove) {
-            return "this address not exist"
+            return {message: "this address not exist", status: false}
         }
 
         await this.addressRepository.remove(addressToRemove)
 
-        return "address has been removed"
+        return {message: "address has been removed", status: true}
     }
-
 }

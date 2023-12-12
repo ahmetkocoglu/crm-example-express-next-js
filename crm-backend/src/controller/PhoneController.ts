@@ -1,13 +1,20 @@
 import { AppDataSource } from "../data-source"
 import { NextFunction, Request, Response } from "express"
 import { Phone } from "../entity/Phone"
+import { PhoneModel } from "../model/PhoneModel"
 
 export class PhoneController {
 
     private phoneRepository = AppDataSource.getRepository(Phone)
 
     async all(request: Request, response: Response, next: NextFunction) {
-        const phones = this.phoneRepository.find()
+        const phones: PhoneModel[] = await this.phoneRepository.find({
+            select: {
+                id: true,
+                phoneType: true,
+                phoneNumber: true
+            }
+        })
 
         return { data: phones, status: true }
     }
@@ -16,13 +23,18 @@ export class PhoneController {
         const id = parseInt(request.params.id)
 
         const phone = await this.phoneRepository.findOne({
-            where: { id }
+            where: { id },
+            select: {
+                id: true,
+                phoneType: true,
+                phoneNumber: true
+            }
         })
 
         if (!phone) {
-            return "unregistered phone"
+            return { message: "unregistered phone", status: false }
         }
-        return phone
+        return { data: phone, status: true }
     }
 
     async save(request: Request, response: Response, next: NextFunction) {
@@ -64,12 +76,11 @@ export class PhoneController {
         let phoneToRemove = await this.phoneRepository.findOneBy({ id })
 
         if (!phoneToRemove) {
-            return "this phone not exist"
+            return { message: "this phone not exist", status: false }
         }
 
         await this.phoneRepository.remove(phoneToRemove)
 
-        return "phone has been removed"
+        return { message: "phone has been removed", status: true }
     }
-
 }
