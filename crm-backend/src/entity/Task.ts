@@ -46,7 +46,7 @@ export class Task {
         const log = Object.assign(new Log(), {
             type: 'user_info',
             process: 'adres bilgisi',
-            user: this.id
+            user: this.user
         })
 
         logRepository.save(log)

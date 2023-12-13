@@ -45,6 +45,7 @@ export class PhoneController {
             phoneType,
             phoneNumber
         })
+console.log('---');
 
         try {
             const insert = await this.phoneRepository.save(phone)

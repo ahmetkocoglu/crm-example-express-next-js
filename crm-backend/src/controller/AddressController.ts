@@ -11,7 +11,7 @@ export class AddressController {
         const addresses: AddressModel[] = await this.addressRepository.find({
             select: {
                 id: true,
-                ContactType: true,
+                addressType: true,
                 addressLine: true,
                 location: true
             }
@@ -27,7 +27,7 @@ export class AddressController {
             where: { id },
             select: {
                 id: true,
-                ContactType: true,
+                addressType: true,
                 addressLine: true,
                 location: true
             }
@@ -40,11 +40,11 @@ export class AddressController {
     }
 
     async save(request: Request, response: Response, next: NextFunction) {
-        const { userId, ContactType, addressLine, location } = request.body;
+        const { userId, addressType, addressLine, location } = request.body;
 
         const address = Object.assign(new Address(), {
             user: userId,
-            ContactType,
+            addressType,
             addressLine,
             location
         })
@@ -59,12 +59,12 @@ export class AddressController {
 
     async update(request: Request, response: Response, next: NextFunction) {
         const id = parseInt(request.params.id)
-        const { userId, ContactType, addressLine, location } = request.body;
+        const { userId, addressType, addressLine, location } = request.body;
 
         try {
             const update = await this.addressRepository.update({ id }, {
                 user: userId,
-                ContactType,
+                addressType,
                 addressLine,
                 location
             })

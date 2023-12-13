@@ -11,7 +11,7 @@ export class Address {
     id: number
 
     @Column({ type: "enum", enum: ContactType, default: ContactType.HOME, nullable: false })
-    ContactType: ContactType
+    addressType: ContactType
 
     @Column({nullable: true})
     addressLine: string
@@ -38,7 +38,7 @@ export class Address {
         const log = Object.assign(new Log(), {
             type: 'user_info',
             process: 'adres bilgisi',
-            user: this.id
+            user: this.user
         })
 
         logRepository.save(log)

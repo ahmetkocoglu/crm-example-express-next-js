@@ -46,7 +46,7 @@ export class Calender {
         const log = Object.assign(new Log(), {
             type: 'user_info',
             process: 'takvim bilgisi',
-            user: this.id
+            user: this.user
         })
 
         logRepository.save(log)

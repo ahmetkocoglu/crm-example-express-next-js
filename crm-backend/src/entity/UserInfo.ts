@@ -28,7 +28,7 @@ export class UserInfo {
         const log = Object.assign(new Log(), {
             type: 'user_info',
             process: 'üye bilgisi',
-            user: this.id
+            user: this.user
         })
 
         logRepository.save(log)
