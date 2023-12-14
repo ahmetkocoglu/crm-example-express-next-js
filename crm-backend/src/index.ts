@@ -14,7 +14,23 @@ AppDataSource.initialize().then(async () => {
     app.use(bodyParser.json())
     app.use(cors({ credentials: true }))
 
+    app.get('/api/user(s)?|(user-)?list|ab+', async (req: Request, res: Response) => {
+        res.send('Hello World!')   
+    })
+
+    app.get(/^\/api\/doc(s|umentation)$/, async (req: Request, res: Response) => {
+        res.send('Hello World!')   
+    })
+
+    app.get('/api/user/:year([0-9]{4})-:month([0-9]{2})-:day([0-9]{2})', async (req: Request, res: Response) => {
+        console.log(req.params.month);
+        
+        res.send(req.params)   
+    })
+
     app.all('*', async (request: Request, response: Response, next: NextFunction) => {
+        console.log(request.params);
+        
         console.log('bir istek yapıldı');
         if (request.url.endsWith('/login') || request.url.endsWith('/register')) {
             next()
@@ -36,6 +52,7 @@ AppDataSource.initialize().then(async () => {
             }
         }
     })
+
     // register express routes from defined application routes
     Routes.forEach(route => {
         (app as any)[route.method](`/api/v1${route.route}`, async (req: Request, res: Response, next: Function) => {
