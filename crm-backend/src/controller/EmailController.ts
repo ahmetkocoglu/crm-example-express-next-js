@@ -9,10 +9,12 @@ export class EmailController {
 
     async all(request: Request, response: Response, next: NextFunction) {
         const email: EmailModel[] = await this.emailRepository.find({
+            relations: { user: true },
             select: {
                 id: true,
                 emailType: true,
-                emailAddress: true
+                emailAddress: true,
+                user: { id: true, firstName: true, lastName: true },
             }
         })
 
@@ -24,10 +26,12 @@ export class EmailController {
 
         const email = await this.emailRepository.findOne({
             where: { id },
+            relations: { user: true },
             select: {
                 id: true,
                 emailType: true,
-                emailAddress: true
+                emailAddress: true,
+                user: { id: true, firstName: true, lastName: true },
             }
         })
 
@@ -64,7 +68,7 @@ export class EmailController {
                 emailType,
                 emailAddress
             })
-            return { data: update, status: update.affected > 0  }
+            return { data: update, status: update.affected > 0 }
         } catch (error) {
             next({ error, status: 404 })
         }

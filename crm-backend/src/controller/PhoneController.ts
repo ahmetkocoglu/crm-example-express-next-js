@@ -9,10 +9,12 @@ export class PhoneController {
 
     async all(request: Request, response: Response, next: NextFunction) {
         const phones: PhoneModel[] = await this.phoneRepository.find({
+            relations: { user: true },
             select: {
                 id: true,
                 phoneType: true,
-                phoneNumber: true
+                phoneNumber: true,
+                user: { id: true, firstName: true, lastName: true },
             }
         })
 
@@ -24,10 +26,12 @@ export class PhoneController {
 
         const phone = await this.phoneRepository.findOne({
             where: { id },
+            relations: { user: true },
             select: {
                 id: true,
                 phoneType: true,
-                phoneNumber: true
+                phoneNumber: true,
+                user: { id: true, firstName: true, lastName: true },
             }
         })
 

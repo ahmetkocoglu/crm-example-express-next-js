@@ -9,11 +9,13 @@ export class AddressController {
 
     async all(request: Request, response: Response, next: NextFunction) {
         const addresses: AddressModel[] = await this.addressRepository.find({
+            relations: { user: true },
             select: {
                 id: true,
                 addressType: true,
                 addressLine: true,
-                location: true
+                location: true,
+                user: { id: true, firstName: true, lastName: true }
             }
         })
 
@@ -25,11 +27,13 @@ export class AddressController {
 
         const address = await this.addressRepository.findOne({
             where: { id },
+            relations: { user: true },
             select: {
                 id: true,
                 addressType: true,
                 addressLine: true,
-                location: true
+                location: true,
+                user: { id: true, firstName: true, lastName: true }
             }
         })
 
@@ -68,7 +72,7 @@ export class AddressController {
                 addressLine,
                 location
             })
-            return { data: update, status: update.affected > 0  }
+            return { data: update, status: update.affected > 0 }
         } catch (error) {
             next({ error, status: 404 })
         }
@@ -80,11 +84,11 @@ export class AddressController {
         let addressToRemove = await this.addressRepository.findOneBy({ id })
 
         if (!addressToRemove) {
-            return {message: "this address not exist", status: false}
+            return { message: "this address not exist", status: false }
         }
 
         await this.addressRepository.remove(addressToRemove)
 
-        return {message: "address has been removed", status: true}
+        return { message: "address has been removed", status: true }
     }
 }
