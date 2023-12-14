@@ -1,6 +1,9 @@
 import { AppDataSource } from "../data-source"
 import { NextFunction, Request, Response } from "express"
 import { Task } from "../entity/Task"
+import { TaskStatus } from "../enum/TaskStatus"
+import { Log } from "../entity/Log"
+import { getUserFromJWT } from "../utility/getUserIdFromJWT"
 
 export class TaskController {
 
@@ -82,6 +85,32 @@ export class TaskController {
                 responsible: responsibleId,
                 status
             })
+            return { data: update, status: update.affected > 0 }
+        } catch (error) {
+            next({ error, status: 404 })
+        }
+    }
+
+    async next(request: Request, response: Response, next: NextFunction) {
+        const id = parseInt(request.params.id)
+
+        try {
+            const update = await this.taskRepository.update({ id }, {
+                status: TaskStatus.IN_PROGRESS
+            })
+
+            const user: any = await getUserFromJWT(request)
+            console.log(user);
+            
+            const logRepository = AppDataSource.getRepository(Log)
+            const log = Object.assign(new Log(), {
+                type: 'task',
+                process: 'görev çalışmaya başlandı >>> ',
+                user: user.id
+            })
+
+            logRepository.save(log)
+
             return { data: update, status: update.affected > 0 }
         } catch (error) {
             next({ error, status: 404 })

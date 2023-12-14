@@ -9,6 +9,7 @@ import { LoginModel } from "../model/LoginModel";
 import { ResponseLoginModel } from "../model/ResponseLoginModel";
 import { getUserFromJWT } from "../utility/getUserIdFromJWT";
 import { newUser } from "../utility/new-user";
+import { LogSave } from "../utility/log-save";
 
 export class AuthController {
 
@@ -36,6 +37,8 @@ export class AuthController {
                     exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24,
                     data: loginUser,
                 }, "secret")
+
+                LogSave(user.id, 'Login İşlemi Yapıldı', 'user')
 
                 return { status: true, token, user: loginUser }
             } else {

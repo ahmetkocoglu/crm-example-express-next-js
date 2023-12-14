@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, AfterInsert } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, AfterInsert, BeforeUpdate, AfterUpdate } from "typeorm"
 import { User } from "./User"
 import { AppDataSource } from "../data-source"
 import { Log } from "./Log"
@@ -44,8 +44,8 @@ export class Task {
     async userLog(){
         const logRepository = AppDataSource.getRepository(Log)
         const log = Object.assign(new Log(), {
-            type: 'user_info',
-            process: 'adres bilgisi',
+            type: 'task',
+            process: 'görev atandı >>> ' + this.responsible,
             user: this.user
         })
 

@@ -151,6 +151,11 @@ export const Routes = [{
     controller: TaskController,
     action: "update"
 }, {
+    method: "put",
+    route: "/tasks/:id/next",
+    controller: TaskController,
+    action: "next"
+}, {
     method: "delete",
     route: "/tasks/:id",
     controller: TaskController,
