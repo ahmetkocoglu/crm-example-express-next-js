@@ -7,39 +7,85 @@ export class TaskController {
     private taskRepository = AppDataSource.getRepository(Task)
 
     async all(request: Request, response: Response, next: NextFunction) {
-        return this.taskRepository.find()
+        const tasks = await this.taskRepository.find({
+            relations: { user: true, responsible: true },
+            select: {
+                id: true,
+                type: true,
+                title: true,
+                description: true,
+                user: { id: true, firstName: true, lastName: true },
+                responsible: { id: true, firstName: true, lastName: true },
+                status: true,
+                createdAt: true,
+                updateAt: true,
+                deletedAt: true
+            }
+        })
+
+        return { data: tasks, status: tasks.length > 0 }
     }
 
     async one(request: Request, response: Response, next: NextFunction) {
         const id = parseInt(request.params.id)
 
         const task = await this.taskRepository.findOne({
-            where: { id }
+            where: { id },
+            relations: { user: true, responsible: true },
+            select: {
+                id: true,
+                type: true,
+                title: true,
+                description: true,
+                user: { id: true, firstName: true, lastName: true },
+                responsible: { id: true, firstName: true, lastName: true },
+                status: true,
+                createdAt: true,
+                updateAt: true,
+                deletedAt: true
+            }
         })
 
-        if (!task) {
-            return "unregistered task"
-        }
-        return task
+        return { data: task, status: task ? true : false, message: task ? "" : "empty task" }
     }
 
     async save(request: Request, response: Response, next: NextFunction) {
-        const {  } = request.body;
+        const { type, title, description, userId, responsibleId, status } = request.body;
 
         const task = Object.assign(new Task(), {
-           
+            type,
+            title,
+            description,
+            user: userId,
+            responsible: responsibleId,
+            status
         })
 
-        return await this.taskRepository.save(task)
+        try {
+            const insert = await this.taskRepository.save(task)
+            return { data: insert, status: true }
+        } catch (error) {
+            next({ error, status: 404 })
+        }
     }
 
     async update(request: Request, response: Response, next: NextFunction) {
         const id = parseInt(request.params.id)
-        const { } = request.body;
+        const { type, title, description, userId, responsibleId, status } = request.body;
 
-        return await this.taskRepository.update({ id }, {
-            
-        })
+        try {
+            const update = await this.taskRepository.update({ id }, {
+                type,
+                title,
+                description,
+                user: userId,
+                responsible: responsibleId,
+                status
+            })
+            return { data: update, status: update.affected > 0 }
+        } catch (error) {
+            next({ error, status: 404 })
+        }
     }
 
     async remove(request: Request, response: Response, next: NextFunction) {
@@ -48,12 +94,12 @@ export class TaskController {
         let taskToRemove = await this.taskRepository.findOneBy({ id })
 
         if (!taskToRemove) {
-            return "this task not exist"
+            return { message: "this task not exist", status: false }
         }
 
         await this.taskRepository.remove(taskToRemove)
 
-        return "task has been removed"
+        return { message: "task has been removed", status: true }
     }
 
 }

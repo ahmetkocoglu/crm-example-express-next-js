@@ -2,6 +2,7 @@ import { AddressController } from "./controller/AddressController";
 import { AuthController } from "./controller/AuthController"
 import { EmailController } from "./controller/EmailController";
 import { PhoneController } from "./controller/PhoneController"
+import { TaskController } from "./controller/TaskController";
 import { UserController } from "./controller/UserController"
 
 export const Routes = [{
@@ -128,5 +129,30 @@ export const Routes = [{
     method: "delete",
     route: "/addresses/:id",
     controller: AddressController,
+    action: "remove"
+}, {
+    method: "get",
+    route: "/tasks",
+    controller: TaskController,
+    action: "all"
+}, {
+    method: "get",
+    route: "/tasks/:id",
+    controller: TaskController,
+    action: "one"
+}, {
+    method: "post",
+    route: "/tasks",
+    controller: TaskController,
+    action: "save"
+}, {
+    method: "put",
+    route: "/tasks/:id",
+    controller: TaskController,
+    action: "update"
+}, {
+    method: "delete",
+    route: "/tasks/:id",
+    controller: TaskController,
     action: "remove"
 }];

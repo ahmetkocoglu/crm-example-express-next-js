@@ -7,6 +7,7 @@ import { Address } from "./entity/Address"
 import { Calender } from "./entity/Calender"
 import { UserInfo } from "./entity/UserInfo"
 import { Log } from "./entity/Log"
+import { Task } from "./entity/Task"
 require('dotenv').config();
 
 export const AppDataSource = new DataSource({
@@ -18,7 +19,7 @@ export const AppDataSource = new DataSource({
     password: process.env.DB_PASSWORD,
     synchronize: true, // canlıda false yapılmalı
     logging: false,
-    entities: [User, Email, Phone, Address, Calender, UserInfo, Log],
+    entities: [User, Email, Phone, Address, Calender, UserInfo, Log, Task],
     migrations: [],
     subscribers: [],
 })

@@ -17,7 +17,7 @@ export class Task {
     @Column({ type: 'varchar', length: 150, nullable: false })
     title: string
 
-    @Column({ type: 'text', length: 400 })
+    @Column({ type: 'text' })
     description: string
 
     @ManyToOne(() => User, (user) => user.id, {nullable: false})

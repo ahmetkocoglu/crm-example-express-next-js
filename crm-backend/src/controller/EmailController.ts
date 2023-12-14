@@ -64,7 +64,7 @@ export class EmailController {
                 emailType,
                 emailAddress
             })
-            return { data: update, status: true }
+            return { data: update, status: update.affected > 0  }
         } catch (error) {
             next({ error, status: 404 })
         }
