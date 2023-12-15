@@ -1,5 +1,6 @@
 import { AddressController } from "./controller/AddressController";
 import { AuthController } from "./controller/AuthController"
+import { CalenderController } from "./controller/CalenderController";
 import { EmailController } from "./controller/EmailController";
 import { PhoneController } from "./controller/PhoneController"
 import { TaskController } from "./controller/TaskController";
@@ -159,5 +160,30 @@ export const Routes = [{
     method: "delete",
     route: "/tasks/:id",
     controller: TaskController,
+    action: "remove"
+}, {
+    method: "get",
+    route: "/calenders",
+    controller: CalenderController,
+    action: "all"
+}, {
+    method: "get",
+    route: "/calenders/:id",
+    controller: CalenderController,
+    action: "one"
+}, {
+    method: "post",
+    route: "/calenders",
+    controller: CalenderController,
+    action: "save"
+}, {
+    method: "put",
+    route: "/calenders/:id",
+    controller: CalenderController,
+    action: "update"
+}, {
+    method: "delete",
+    route: "/calenders/:id",
+    controller: CalenderController,
     action: "remove"
 }];
