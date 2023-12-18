@@ -3,12 +3,13 @@ import { NextFunction, Request, Response } from "express"
 import { Calender } from "../entity/Calender"
 import { CalenderModel } from "../model/CalenderModel"
 import { User } from "../entity/User"
-import { CalenderUserModel } from "../model/CalenderUserModel"
 
 export class CalenderController {
 
     private calenderRepository = AppDataSource.getRepository(Calender)
     private userRepository = AppDataSource.getRepository(User)
+
+    
 
     async all(request: Request, response: Response, next: NextFunction) {
         const calenders = await this.calenderRepository.find({
