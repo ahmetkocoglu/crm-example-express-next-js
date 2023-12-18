@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store";
 import { useForm } from "react-hook-form";
 import { login } from "@/store/apps/login";
 import Input from "./input";
@@ -19,13 +19,20 @@ const loginFormSchema = yup.object().shape({
 });
 
 const defaultValues: FormValues = {
-  email: "abc@xyz.com",
-  password: "123",
+  email: "test@xyz.com",
+  password: "123456",
 };
 
 const Login = () => {
   // ** Redux
   const dispatch = useDispatch<AppDispatch>();
+
+  // ** Selector
+  const isLogin: any = useSelector((state: RootState) => state.login.isLogin);
+
+  // ** State
+  const [loginErrorMessage, setLoginErrorMessage] = useState("");
+  const [isOnSubmit, setIsOnSubmit] = useState(false);
 
   const {
     register,
@@ -43,8 +50,17 @@ const Login = () => {
   const onSubmit = (payload: FormValues) => {
     dispatch(login(payload));
     reset(defaultValues);
-    router.push('/')
+    setIsOnSubmit(true);
   };
+
+  useEffect(() => {
+    if (isLogin) {
+      router.push("/");
+    } else {
+      if (isOnSubmit) setLoginErrorMessage("email ve/veya şifre geçersiz");
+    }
+  }, [isLogin, isOnSubmit, router]);
+
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -70,6 +86,7 @@ const Login = () => {
             {errors.password && <>{errors.password.message}</>}
           </div>
           <div className="w-full md:w-2/2 px-1">
+            {loginErrorMessage}
             <button type="submit">Gönder</button>
           </div>
         </div>

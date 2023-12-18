@@ -24,7 +24,8 @@ export const appLoginSlice = createSlice({
         data: {},
         loading: false,
         isToken: false,
-        isLogin: false
+        isLogin: false,
+        loginErrorMessage: ""
     },
     reducers: {
         handleToken: (state: any, action: PayloadAction<string>) => {
@@ -49,7 +50,7 @@ export const appLoginSlice = createSlice({
             state.loading = false
         })
         builder.addCase(login.rejected, (state: any, action: any) => {
-            state.loading = false
+            state.loading = false            
         })
 
         builder.addCase(getIsLogin.pending, (state: any) => {
