@@ -17,16 +17,21 @@ AppDataSource.initialize().then(async () => {
     // app.get('/api/user(s)?|(user-)?list|ab+', async (req: Request, res: Response) => {
     //     res.send('Hello World!')   
     // })
+    // /api/users
+    // /api/user-list
 
     // app.get(/^\/api\/doc(s|umentation)$/, async (req: Request, res: Response) => {
     //     res.send('Hello World!')   
     // })
+    // /api/docs
+    // /api/documentation
 
     // app.get('/api/user/:year([0-9]{4})-:month([0-9]{2})-:day([0-9]{2})', async (req: Request, res: Response) => {
     //     console.log(req.params.month);
         
     //     res.send(req.params)   
     // })
+    // /api/user/2023-12-18
 
     app.all('*', async (request: Request, response: Response, next: NextFunction) => {
         console.log('bir istek yapıldı');

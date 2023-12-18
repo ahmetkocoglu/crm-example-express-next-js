@@ -33,7 +33,7 @@ export class Phone {
     async userLog(){
         const logRepository = AppDataSource.getRepository(Log)
         const log = Object.assign(new Log(), {
-            type: 'user_info',
+            type: 'phone',
             process: 'adres bilgisi',
             user: this.user
         })

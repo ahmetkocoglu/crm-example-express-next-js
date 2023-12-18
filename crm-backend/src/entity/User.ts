@@ -6,9 +6,8 @@ import { Address } from "./Address"
 import * as bcrypt from 'bcrypt';
 import { AppDataSource } from "../data-source";
 import { Log } from "./Log";
-
-enum role { ADMIN = 'admin', USER = 'user', CUSTOMER = 'customer' };
-enum confirmed { PENDING = 'pending', EMAIL = 'email', APPROVAL = 'approval', DENIED = 'denied' };
+import { UserRoleEnum } from "../enum/UserRoleEnum";
+import { UserConfirmedEnum } from "../enum/UserConfirmedEnum";
 
 @Entity("users")
 export class User {
@@ -35,11 +34,11 @@ export class User {
     @Length(6, 10)
     password: string
 
-    @Column({ type: "enum", enum: role, default: role.USER, nullable: false })
-    role: role
+    @Column({ type: "enum", enum: UserRoleEnum, default: UserRoleEnum.USER, nullable: false })
+    role: UserRoleEnum
 
-    @Column({ type: "enum", enum: confirmed, default: confirmed.PENDING, nullable: false })
-    confirmed: confirmed
+    @Column({ type: "enum", enum: UserConfirmedEnum, default: UserConfirmedEnum.PENDING, nullable: false })
+    confirmed: UserConfirmedEnum
 
     @OneToMany(() => Phone, (phone) => phone.user, { cascade: true })
     phone: Phone[]

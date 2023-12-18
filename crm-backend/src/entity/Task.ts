@@ -14,7 +14,7 @@ export class Task {
     @Column({ type: "enum", enum: TaskType, default: TaskType.STANDARD, nullable: false })
     type: TaskType
 
-    @Column({ type: 'varchar', length: 150, nullable: false })
+    @Column({ type: 'varchar', length: 250, nullable: false })
     title: string
 
     @Column({ type: 'text' })

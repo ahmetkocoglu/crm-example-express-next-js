@@ -13,10 +13,10 @@ export class Address {
     @Column({ type: "enum", enum: ContactType, default: ContactType.HOME, nullable: false })
     addressType: ContactType
 
-    @Column({nullable: true})
+    @Column({nullable: true, length:250})
     addressLine: string
 
-    @Column({nullable: true})
+    @Column({nullable: true, length:30})
     location: string
 
     @ManyToOne(() => User, (user) => user.id, {onDelete: 'CASCADE', nullable: false})
@@ -36,7 +36,7 @@ export class Address {
     async userLog(){
         const logRepository = AppDataSource.getRepository(Log)
         const log = Object.assign(new Log(), {
-            type: 'user_info',
+            type: 'address',
             process: 'adres bilgisi',
             user: this.user
         })

@@ -1,11 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn } from "typeorm"
 import { User } from "./User"
-
-enum type {
-    ADDRESS = 'address', CALENDER = 'calender',
-    EMAIL = 'email', PHONE = 'phone', TASK = 'task',
-    USER = 'user', USER_INFO = 'user_info'
-};
+import { LogTypeEnum } from "../enum/LogTypeEnum"
 
 @Entity("logs")
 export class Log {
@@ -13,8 +8,8 @@ export class Log {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column({ type: "enum", enum: type, default: type.TASK, nullable: false })
-    type: type
+    @Column({ type: "enum", enum: LogTypeEnum, default: LogTypeEnum.TASK, nullable: false })
+    type: LogTypeEnum
 
     @Column({ type: 'varchar', length: 200, nullable: false })
     process: string

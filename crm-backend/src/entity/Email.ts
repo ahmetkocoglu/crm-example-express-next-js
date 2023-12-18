@@ -13,7 +13,7 @@ export class Email {
     @Column({ type: "enum", enum: ContactType, default: ContactType.HOME, nullable: false })
     emailType: ContactType
 
-    @Column({nullable: false})
+    @Column({type: 'varchar', length: 100, nullable: false})
     emailAddress: string
 
     @ManyToOne(() => User, (user) => user.id, {onDelete: 'CASCADE', nullable: false})
@@ -33,7 +33,7 @@ export class Email {
     async userLog(){
         const logRepository = AppDataSource.getRepository(Log)
         const log = Object.assign(new Log(), {
-            type: 'user_info',
+            type: 'email',
             process: 'adres bilgisi',
             user: this.user
         })
