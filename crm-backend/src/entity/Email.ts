@@ -13,7 +13,7 @@ export class Email {
     @Column({ type: "enum", enum: ContactType, default: ContactType.HOME, nullable: false })
     emailType: ContactType
 
-    @Column({nullable: false})
+    @Column({nullable: false, length    : 100})
     emailAddress: string
 
     @ManyToOne(() => User, (user) => user.id, {onDelete: 'CASCADE', nullable: false})

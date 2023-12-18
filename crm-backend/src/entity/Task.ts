@@ -14,10 +14,10 @@ export class Task {
     @Column({ type: "enum", enum: TaskType, default: TaskType.STANDARD, nullable: false })
     type: TaskType
 
-    @Column({ type: 'varchar', length: 150, nullable: false })
+    @Column({ type: 'varchar', length: 250, nullable: false }) //! boş bırakılamaz
     title: string
 
-    @Column({ type: 'text' })
+    @Column({ type: 'text' }) //! boş bırakılabilir
     description: string
 
     @ManyToOne(() => User, (user) => user.id, {nullable: false})

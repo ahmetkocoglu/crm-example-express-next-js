@@ -28,7 +28,7 @@ AppDataSource.initialize().then(async () => {
     //     res.send(req.params)   
     // })
 
-    app.all('*', async (request: Request, response: Response, next: NextFunction) => {
+    app.all('*', async (request: Request, response: Response, next: NextFunction) => { //!app.all : tüm istekleri yakalar, delete, put, post, get
         console.log('bir istek yapıldı');
         if (request.url.endsWith('/login') || request.url.endsWith('/register')) {
             next()

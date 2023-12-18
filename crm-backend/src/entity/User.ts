@@ -6,9 +6,8 @@ import { Address } from "./Address"
 import * as bcrypt from 'bcrypt';
 import { AppDataSource } from "../data-source";
 import { Log } from "./Log";
-
-enum role { ADMIN = 'admin', USER = 'user', CUSTOMER = 'customer' };
-enum confirmed { PENDING = 'pending', EMAIL = 'email', APPROVAL = 'approval', DENIED = 'denied' };
+import { UserConfirmEnum } from "../enum/UserConfirmEnum";
+import { UserRoleEnum } from "../enum/UserRoleEnum";
 
 @Entity("users")
 export class User {
@@ -35,11 +34,11 @@ export class User {
     @Length(6, 10)
     password: string
 
-    @Column({ type: "enum", enum: role, default: role.USER, nullable: false })
-    role: role
+    @Column({ type: "enum", enum: UserRoleEnum, default: UserRoleEnum.USER, nullable: false })
+    role: UserRoleEnum
 
-    @Column({ type: "enum", enum: confirmed, default: confirmed.PENDING, nullable: false })
-    confirmed: confirmed
+    @Column({ type: "enum", enum: UserConfirmEnum, default: UserConfirmEnum.PENDING, nullable: false })
+    confirmed: UserConfirmEnum
 
     @OneToMany(() => Phone, (phone) => phone.user, { cascade: true })
     phone: Phone[]
@@ -108,9 +107,9 @@ export class User {
         logRepository.save(log)
     }
 
-    fullName: string;
+    fullName: string; // burada herşeyi yaptık ama bu alanı doldurmadık. bunu doldurmak için afterLoad kullanıyoruz.
 
-    @AfterLoad()
+    @AfterLoad()  // burada afterload kullanarak fullName alanını dolduruyoruz. 
     afterLoad() {
         this.fullName = `${this.firstName} ${this.lastName}`;
     }

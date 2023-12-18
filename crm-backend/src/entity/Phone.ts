@@ -13,7 +13,7 @@ export class Phone {
     @Column({ type: "enum", enum: ContactType, default: ContactType.HOME, nullable: false })
     phoneType: ContactType
 
-    @Column({ type: 'varchar', length: 20, nullable: false })
+    @Column({ type: 'varchar', length: 20, nullable: false })  
     phoneNumber: string
 
     @ManyToOne(() => User, (user) => user.id, { onDelete: 'CASCADE', nullable: false })

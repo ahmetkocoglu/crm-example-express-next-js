@@ -19,11 +19,11 @@ export class AuthController {
         const { email, password }: LoginModel = request.body;
 
         const user = await this.userRepository.findOne({
-            where: { email }
+            where: { email } //! böyle biri var mı? var ise user değişkenine atar
         })
 
         if (user) {
-            const isValid = await bcrypt.compare(password, user.password)
+            const isValid = await bcrypt.compare(password, user.password) //! şifre doğru mu? compare ile karşılaştırır ve boolean döner. true ise isValid true olur
             if (isValid) {
                 const loginUser: ResponseLoginModel = {
                     firstName: user.firstName,

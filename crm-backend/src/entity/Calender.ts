@@ -3,7 +3,6 @@ import { User } from "./User"
 import { AppDataSource } from "../data-source"
 import { Log } from "./Log"
 import { CalenderEnum } from "../enum/CalenderEnum"
-import { CalenderUserModel } from "../model/CalenderUserModel"
 
 @Entity("calenders")
 export class Calender {
