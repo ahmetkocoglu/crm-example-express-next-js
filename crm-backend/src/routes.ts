@@ -2,6 +2,7 @@ import { AddressController } from "./controller/AddressController";
 import { AuthController } from "./controller/AuthController"
 import { CalenderController } from "./controller/CalenderController";
 import { EmailController } from "./controller/EmailController";
+import { EnumController } from "./controller/EnumController";
 import { PhoneController } from "./controller/PhoneController"
 import { TaskController } from "./controller/TaskController";
 import { UserController } from "./controller/UserController"
@@ -186,4 +187,39 @@ export const Routes = [{
     route: "/calenders/:id",
     controller: CalenderController,
     action: "remove"
+}, {
+    method: "get",
+    route: "/enum/task",
+    controller: EnumController,
+    action: "task"
+}, {
+    method: "get",
+    route: "/enum/calender",
+    controller: EnumController,
+    action: "calender"
+}, {
+    method: "get",
+    route: "/enum/contact",
+    controller: EnumController,
+    action: "contact"
+}, {
+    method: "get",
+    route: "/enum/log",
+    controller: EnumController,
+    action: "log"
+}, {
+    method: "get",
+    route: "/enum/task-status",
+    controller: EnumController,
+    action: "taskStatus"
+}, {
+    method: "get",
+    route: "/enum/confirm",
+    controller: EnumController,
+    action: "confirm"
+}, {
+    method: "get",
+    route: "/enum/users-role",
+    controller: EnumController,
+    action: "usersRole"
 }];

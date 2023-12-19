@@ -20,8 +20,9 @@ const Customer = () => {
   return (
     <>
       <Menu />
-      {usersLoading ? "Yükleniyor" : "Yüklendi"}
-      {JSON.stringify(users)}
+      {usersLoading ? "Yükleniyor" : users.map((k:any) =>{
+        return <><div>{k.firstName} {k.lastName} {k.email} {k.role}</div></>
+      })}
     </>
   )
 }

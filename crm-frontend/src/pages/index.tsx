@@ -37,7 +37,7 @@ export default function Home() {
           <div className="w-full md:w-1/4 px-3">
             <Link href="/customer">Müşteriler</Link></div>
           <div className="w-full md:w-1/4 px-3 whitespace-nowrap">
-            <Link href="new-meeting">Yeni Toplatı / Görüşme</Link>
+            <Link href="task">Yeni Görev</Link>
           </div>
           <div className="w-full md:w-1/4 px-3">
             <Link href="/calender">Takvim</Link>

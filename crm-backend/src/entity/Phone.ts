@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDa
 import { User } from "./User"
 import { AppDataSource } from "../data-source"
 import { Log } from "./Log"
-import { ContactType } from "../enum/ContactType"
+import { ContactEnum } from "../enum/ContactEnum"
 
 @Entity("phones")
 export class Phone {
@@ -10,8 +10,8 @@ export class Phone {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column({ type: "enum", enum: ContactType, default: ContactType.HOME, nullable: false })
-    phoneType: ContactType
+    @Column({ type: "enum", enum: ContactEnum, default: ContactEnum.HOME, nullable: false })
+    phoneType: ContactEnum
 
     @Column({ type: 'varchar', length: 20, nullable: false })
     phoneNumber: string

@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDa
 import { User } from "./User"
 import { AppDataSource } from "../data-source"
 import { Log } from "./Log"
-import { TaskType } from "../enum/TaskType"
+import { TaskEnum } from "../enum/TaskEnum"
 import { TaskStatus } from "../enum/TaskStatus"
 
 @Entity("tasks")
@@ -11,8 +11,8 @@ export class Task {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column({ type: "enum", enum: TaskType, default: TaskType.STANDARD, nullable: false })
-    type: TaskType
+    @Column({ type: "enum", enum: TaskEnum, default: TaskEnum.STANDARD, nullable: false })
+    type: TaskEnum
 
     @Column({ type: 'varchar', length: 250, nullable: false })
     title: string
