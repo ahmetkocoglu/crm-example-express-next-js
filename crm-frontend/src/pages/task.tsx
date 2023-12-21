@@ -66,6 +66,8 @@ const NewMeeting = () => {
   const users: any[] = useSelector((state: RootState) => state.user.users);
   const enumsData = useSelector((state: RootState) => state.enums.data);
 
+  const saveLoading = useSelector((state: RootState) => state.tasks.loading)
+
   // ** State **
   const [task, setTask] = useState<any[]>([])
   const [taskStatus, setTaskStatus] = useState<any[]>([])
@@ -107,6 +109,7 @@ const NewMeeting = () => {
       userId: payload.user.id,
       responsibleId: payload.responsible.id
     }))
+    reset(defaultValues)
   };
 
   return (
@@ -232,7 +235,7 @@ const NewMeeting = () => {
               {errors.responsible && <>{errors.responsible.message}</>}
             </div>
             <div className="w-full md:w-2/2 px-1">
-              <button type="submit">Gönder</button>
+              {saveLoading ? <>işleminiz yapılıyor</> : <><button type="submit">Gönder</button></>}
             </div>
           </div>
         </form>

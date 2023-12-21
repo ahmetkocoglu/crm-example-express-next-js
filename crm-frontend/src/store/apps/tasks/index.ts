@@ -31,3 +31,5 @@ export const appTaskSlice = createSlice({
         })
     }
 })
+
+export default appTaskSlice.reducer

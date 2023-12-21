@@ -4,12 +4,14 @@ import { configureStore } from "@reduxjs/toolkit";
 import login from '@/store/apps/login'
 import user from '@/store/apps/user'
 import enums from '@/store/apps/enums'
+import tasks from '@/store/apps/tasks'
 
 export const store = configureStore({
     reducer: {
         login,
         user,
-        enums
+        enums,
+        tasks
     }
 })
 
