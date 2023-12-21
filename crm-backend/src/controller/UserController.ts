@@ -12,6 +12,7 @@ export class UserController {
     async all(request: Request, response: Response, next: NextFunction) {
         const users: Array<UserModel> = (await this.userRepository.find()).map((k: UserModel) => {
             return {
+                id: k.id,
                 firstName: k.firstName,
                 lastName: k.lastName,
                 email: k.email,

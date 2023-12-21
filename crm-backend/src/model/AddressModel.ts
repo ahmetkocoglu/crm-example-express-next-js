@@ -1,8 +1,8 @@
-import { ContactType } from "../enum/ContactEnum";
+import { ContactEnum } from "../enum/ContactEnum";
 
 export type AddressModel = {
     id: number;
-    addressType: ContactType;
+    addressType: ContactEnum;
     addressLine: string;
     location: string;
 }
