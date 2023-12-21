@@ -9,7 +9,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Input from "@/components/input";
 import Select from "react-select";
-import { setNewTask } from "@/store/apps/tasks";
+import { getTask, setNewTask } from "@/store/apps/tasks";
 
 type FormValues = {
   type?: any;
@@ -42,8 +42,8 @@ const defaultValues: FormValues = {
   title: "",
   description: "",
   status: {
-    id: 0,
-    name: ""
+    id: 1,
+    name: "appointed"
   },
   user: {
     id: "",
@@ -67,6 +67,7 @@ const NewMeeting = () => {
   const enumsData = useSelector((state: RootState) => state.enums.data);
 
   const saveLoading = useSelector((state: RootState) => state.tasks.loading)
+  const tasks: any[] = useSelector((state: RootState) => state.tasks.data)
 
   // ** State **
   const [task, setTask] = useState<any[]>([])
@@ -76,6 +77,7 @@ const NewMeeting = () => {
     dispatch(getUsers());
     dispatch(getEnum("/enum/task"));
     dispatch(getEnum("/enum/task-status"));
+    dispatch(getTask())
   }, [dispatch]);
 
   useEffect(() => {
@@ -140,8 +142,8 @@ const NewMeeting = () => {
             </div>
             <div className="w-full md:w-1/2 px-1">
               <Controller
-                name={"type"} // for the gender field
-                control={control} // obtained from the useForm hook
+                name={"type"} 
+                control={control} 
                 rules={{ required: true }}
                 render={({ field: { value, onChange, onBlur } }) => {
                   return (
@@ -164,14 +166,15 @@ const NewMeeting = () => {
             </div>
             <div className="w-full md:w-1/2 px-1">
               <Controller
-                name={"status"} // for the gender field
-                control={control} // obtained from the useForm hook
-                rules={{ required: true }}
+                name={"status"} 
+                control={control} 
+                disabled={true}
                 render={({ field: { value, onChange, onBlur } }) => {
                   return (
                     <Select
                     className="text-black"
                       value={value}
+                      isDisabled={true}
                       onBlur={onBlur}
                       onChange={(e: any) => {
                         onChange(e);
@@ -188,8 +191,8 @@ const NewMeeting = () => {
             </div>
             <div className="w-full md:w-1/2 px-1">
               <Controller
-                name={"user"} // for the gender field
-                control={control} // obtained from the useForm hook
+                name={"user"} 
+                control={control} 
                 rules={{ required: true }}
                 render={({ field: { value, onChange, onBlur } }) => {
                   return (
@@ -212,8 +215,8 @@ const NewMeeting = () => {
             </div>
             <div className="w-full md:w-1/2 px-1">
               <Controller
-                name={"responsible"} // for the gender field
-                control={control} // obtained from the useForm hook
+                name={"responsible"} 
+                control={control} 
                 rules={{ required: true }}
                 render={({ field: { value, onChange, onBlur } }) => {
                   return (
@@ -240,6 +243,13 @@ const NewMeeting = () => {
           </div>
         </form>
       </div>
+      <table>
+        <tbody>
+          {tasks.map((task: any, index: number) => {
+            return (<tr key={index}><td>{task.title}</td><td>{task.description}</td></tr>)
+          })}
+        </tbody>
+      </table>
 
       {/* <select className="text-black">
         <option>Seçiniz</option>

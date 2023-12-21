@@ -1,3 +1,4 @@
 export const task = {
-    newTask: 'tasks'
+    newTask: 'tasks',
+    allTask: 'tasks',
 }
