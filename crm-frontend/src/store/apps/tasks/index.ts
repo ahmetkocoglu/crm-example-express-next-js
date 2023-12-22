@@ -5,14 +5,20 @@ import { task } from '@/configs/task'
 // ** Utils **
 import axiosService from '@/utils/axios-services'
 
-export const getTask = createAsyncThunk('getTask', async() => {
+export const getTasks = createAsyncThunk('getTask', async() => {
     const response = await axiosService.get(task.allTask)
 
     return response.data
 })
 
-export const setNewTask = createAsyncThunk('setTask', async (payload: any) => {
+export const setNewTask = createAsyncThunk('setInsertTask', async (payload: any) => {
     const response = await axiosService.post(task.newTask, payload)
+
+    return response.data
+})
+
+export const setUpdateTask = createAsyncThunk('setUpdateTask', async (payload: any) => {
+    const response = await axiosService.put(task.updateTask + payload.id, payload)
 
     return response.data
 })
@@ -35,8 +41,11 @@ export const appTaskSlice = createSlice({
             state.loading = false
         })
         
-        builder.addCase(getTask.fulfilled, (state, action: any) => {
+        builder.addCase(getTasks.fulfilled, (state, action: any) => {
             state.data = action.payload.data
+        })
+
+        builder.addCase(setUpdateTask.fulfilled, (state, action: any) => {
         })
     }
 })
