@@ -3,6 +3,7 @@ import { AuthController } from "./controller/AuthController"
 import { CalenderController } from "./controller/CalenderController";
 import { EmailController } from "./controller/EmailController";
 import { EnumController } from "./controller/EnumController";
+import { FileController } from "./controller/FileController";
 import { PhoneController } from "./controller/PhoneController"
 import { TaskController } from "./controller/TaskController";
 import { UserController } from "./controller/UserController"
@@ -222,4 +223,9 @@ export const Routes = [{
     route: "/enum/users-role",
     controller: EnumController,
     action: "usersRole"
+}, {
+    method: "get",
+    route: "/file-read",
+    controller: FileController,
+    action: "all"
 }];

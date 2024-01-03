@@ -56,12 +56,14 @@ export class Calender {
     @AfterLoad()
     async afterLoad() {
         if (this.participants) {
+            console.log('participantsUser', this.participants);
+            const participants = this.participants.map((k: any) => k.id)
             const userRepository = AppDataSource.getRepository(User)
             const user = await userRepository.find({
-                where: { id: In([this.participants]) }, select: { id: true, firstName: true, lastName: true }
+                where: { id: In(participants) }, select: { id: true, firstName: true, lastName: true }
             })
             this.participantsUser = user;
-        } else {
+        } else {            
             this.participantsUser = [];
         }
     }

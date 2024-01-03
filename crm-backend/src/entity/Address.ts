@@ -3,6 +3,10 @@ import { User } from "./User"
 import { AppDataSource } from "../data-source"
 import { Log } from "./Log"
 import { ContactEnum } from "../enum/ContactEnum"
+import { Country } from "./Country"
+import { City } from "./City"
+import { District } from "./District"
+import { Town } from "./Town"
 
 @Entity("addresses")
 export class Address {
@@ -23,6 +27,21 @@ export class Address {
     @JoinColumn({ name: "userId" })
     user: User
 
+    @ManyToOne(() => Country, (country) => country.id)
+    @JoinColumn()
+    country: Country
+
+    @ManyToOne(() => City, (city) => city.id)
+    @JoinColumn()
+    city: City
+
+    @ManyToOne(() => District, (district) => district.id)
+    @JoinColumn()
+    district: District
+
+    @ManyToOne(() => Town, (town) => town.id)
+    @JoinColumn()
+    town: Town
     @CreateDateColumn()
     createdAt: Date;
 

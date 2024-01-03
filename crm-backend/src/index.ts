@@ -12,6 +12,7 @@ AppDataSource.initialize().then(async () => {
     // create express app
     const app = express()
     app.use(bodyParser.json())
+    app.use(express.static('public'))
     app.use(cors({ credentials: true }))
 
     // app.get('/api/user(s)?|(user-)?list|ab+', async (req: Request, res: Response) => {
