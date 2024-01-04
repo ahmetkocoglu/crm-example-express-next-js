@@ -10,7 +10,7 @@ export class SearchController {
     async all(request: Request, response: Response, next: NextFunction) {
         const search = request.query['search'] as string
 
-        return this.townRepository.find({
+        const list = this.townRepository.find({
             where: [
                 { name: Like(`%${search}%`) },
                 {
@@ -31,6 +31,21 @@ export class SearchController {
             ],
             relations: {
                 district: { city: { country: true } }
+            }
+        })
+
+        //return list
+
+        return (await list).map((k: any) => {
+            return {
+                townId: k.id,
+                townName: k.name,
+                districtId: k.district.id,
+                districtName: k.district.name,
+                cityId: k.district.city.id,
+                cityName: k.district.city.name,
+                countryId: k.district.city.country.id,
+                countryName: k.district.city.country.name
             }
         })
     }
