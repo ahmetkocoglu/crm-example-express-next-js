@@ -1,11 +1,16 @@
 import { AddressController } from "./controller/AddressController";
 import { AuthController } from "./controller/AuthController"
 import { CalenderController } from "./controller/CalenderController";
+import { CityController } from "./controller/CityController";
+import { CountryController } from "./controller/CountryController";
+import { DistrictController } from "./controller/DistrictController";
 import { EmailController } from "./controller/EmailController";
 import { EnumController } from "./controller/EnumController";
 import { FileController } from "./controller/FileController";
 import { PhoneController } from "./controller/PhoneController"
+import { SearchController } from "./controller/SearchController";
 import { TaskController } from "./controller/TaskController";
+import { TownController } from "./controller/TownController";
 import { UserController } from "./controller/UserController"
 
 export const Routes = [{
@@ -227,5 +232,30 @@ export const Routes = [{
     method: "get",
     route: "/file-read",
     controller: FileController,
+    action: "all"
+}, {
+    method: "get",
+    route: "/country",
+    controller: CountryController,
+    action: "all"
+}, {
+    method: "get",
+    route: "/city",
+    controller: CityController,
+    action: "all"
+}, {
+    method: "get",
+    route: "/district",
+    controller: DistrictController,
+    action: "all"
+}, {
+    method: "get",
+    route: "/town",
+    controller: TownController,
+    action: "all"
+}, {
+    method: "get",
+    route: "/search",
+    controller: SearchController,
     action: "all"
 }];
