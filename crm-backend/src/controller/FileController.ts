@@ -8,6 +8,7 @@ import { User } from "../entity/User";
 import { Phone } from "../entity/Phone";
 import { Email } from "../entity/Email";
 import { Address } from "../entity/Address";
+import { ContactEnum } from "../enum/ContactEnum";
 
 export class FileController {
     private countryRepository = AppDataSource.getRepository(Country)
@@ -65,22 +66,23 @@ export class FileController {
             const user = Object.assign(new User(), {
                 firstName: "Test " + x,
                 lastName: "User " + x,
-                age: 11
+                email: "abc" + x + "@xyz.com",
+                password: (Math.random() * 1000000).toFixed(0)
             })
             await this.userRepository.save(user)
         }
 
-        const user = await this.userRepository.findOne({where: {id: 1}})
+        const user = await this.userRepository.findOne({ where: { id: 1 } })
 
         const phone = Object.assign(new Phone(), {
-            phoneType: "iş",
+            phoneType: ContactEnum.HOME,
             phoneNumber: "500 000 00 00",
             user
         })
         await this.phoneRepository.save(phone)
 
         const email = Object.assign(new Email(), {
-            emailType: "iş",
+            emailType: ContactEnum.HOME,
             emailAddress: "abc@xyz.com",
             user
         })
@@ -92,7 +94,7 @@ export class FileController {
         const town = await this.townRepository.findOne({ where: { id: 17572 } })
 
         const address = Object.assign(new Address(), {
-            addressType: "iş",
+            addressType: ContactEnum.HOME,
             addressLine: "12046 SK",
             street: "12046",
             post_code: "20000",
