@@ -1,4 +1,4 @@
-import { AppDispatch } from "@/store";
+// import { AppDispatch } from "@/store";
 import React, { ReactNode, createContext, useContext, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { getIsLogin, logout } from "@/store/apps/login";
@@ -17,20 +17,20 @@ const AuthContext = createContext(defaultProvider);
 
 export function AuthProvider({ children }: Props) {
   // ** Redux
-  const dispatch = useDispatch<AppDispatch>();
+  // const dispatch = useDispatch<AppDispatch>();
 
   const router = useRouter();
 
-  useEffect(() => {
-    if (router.asPath === "/logout") {
-      dispatch(logout());
-      router.push('/login')
-    }
-  }, [router, dispatch]);
+  // useEffect(() => {
+  //   if (router.asPath === "/logout") {
+  //     dispatch(logout());
+  //     router.push('/login')
+  //   }
+  // }, [router, dispatch]);
 
-  useEffect(() => {
-    dispatch(getIsLogin());
-  }, [dispatch, router]);
+  // useEffect(() => {
+  //   dispatch(getIsLogin());
+  // }, [dispatch, router]);
 
   const sharedData = "Context API Kullanımı";
 

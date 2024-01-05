@@ -1,8 +1,8 @@
 import React from 'react'
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '@/store';
+// import { useDispatch } from 'react-redux';
+// import { AppDispatch } from '@/store';
 import { useForm } from 'react-hook-form';
 import Input from './input';
 import { addUser } from '@/store/apps/user';
@@ -27,7 +27,7 @@ const defaultValues: FormValues = {
 
 const AddCustomer = () => {
   // ** Redux
-  const dispatch = useDispatch<AppDispatch>();
+  // const dispatch = useDispatch<AppDispatch>();
 
   const {
     register,
@@ -41,7 +41,7 @@ const AddCustomer = () => {
   });
 
   const onSubmit = (payload: FormValues) => {
-    dispatch(addUser(payload));
+    // dispatch(addUser(payload));
     reset(defaultValues);
   };
 

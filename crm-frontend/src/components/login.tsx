@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/store";
+// import { AppDispatch, RootState } from "@/store";
 import { useForm } from "react-hook-form";
 import { login } from "@/store/apps/login";
 import Input from "./input";
 import { useRouter } from "next/router";
+import { useLoginMutation } from "@/services/login";
 
 type FormValues = {
   email: string;
@@ -24,11 +25,12 @@ const defaultValues: FormValues = {
 };
 
 const Login = () => {
+  const [login] = useLoginMutation()
   // ** Redux
-  const dispatch = useDispatch<AppDispatch>();
+  // const dispatch = useDispatch<AppDispatch>();
 
   // ** Selector
-  const isLogin: any = useSelector((state: RootState) => state.login.isLogin);
+  // const isLogin: any = useSelector((state: RootState) => state.login.isLogin);
 
   // ** State
   const [loginErrorMessage, setLoginErrorMessage] = useState("");
@@ -48,18 +50,26 @@ const Login = () => {
   const router = useRouter();
 
   const onSubmit = (payload: FormValues) => {
-    dispatch(login(payload));
+    // dispatch(login(payload));
+    login(payload)
+            .unwrap()
+            .then((data) => {
+               console.log('login başarılı', data);
+            })
+            .catch(() =>{
+              console.log('Failed to login');
+            });
     reset(defaultValues);
     setIsOnSubmit(true);
   };
 
-  useEffect(() => {
-    if (isLogin) {
-      router.push("/");
-    } else {
-      if (isOnSubmit) setLoginErrorMessage("email ve/veya şifre geçersiz");
-    }
-  }, [isLogin, isOnSubmit, router]);
+  // useEffect(() => {
+  //   if (isLogin) {
+  //     router.push("/");
+  //   } else {
+  //     if (isOnSubmit) setLoginErrorMessage("email ve/veya şifre geçersiz");
+  //   }
+  // }, [isLogin, isOnSubmit, router]);
 
   return (
     <>

@@ -1,7 +1,7 @@
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/store";
+// import { AppDispatch, RootState } from "@/store";
 import { useEffect, useState } from "react";
 import { getUsers } from "@/store/apps/user";
 import { getEnum } from "@/store/apps/enums";
@@ -64,15 +64,15 @@ type Props = {
 // const FormTask: React.FC<Props> = ({data}) => {
 const FormTask = ({ data, id }: Props) => {
   // ** Redux **
-  const dispatch = useDispatch<AppDispatch>();
+  // const dispatch = useDispatch<AppDispatch>();
 
   // ** Selector **
-  const usersLoading = useSelector(
-    (state: RootState) => state.user.usersLoading
-  );
-  const users: any[] = useSelector((state: RootState) => state.user.users);
-  const enumsData = useSelector((state: RootState) => state.enums.data);
-  const saveLoading = useSelector((state: RootState) => state.tasks.loading);
+  // const usersLoading = useSelector(
+  //   (state: RootState) => state.user.usersLoading
+  // );
+  // const users: any[] = useSelector((state: RootState) => state.user.users);
+  // const enumsData = useSelector((state: RootState) => state.enums.data);
+  // const saveLoading = useSelector((state: RootState) => state.tasks.loading);
 
   // ** State **
   const [task, setTask] = useState<any[]>([]);
@@ -106,24 +106,24 @@ const FormTask = ({ data, id }: Props) => {
     setValue("responsible", data?.responsible);
   }, [data]);
 
-  useEffect(() => {
-    dispatch(getUsers());
-    dispatch(getEnum("/enum/task"));
-    dispatch(getEnum("/enum/task-status"));
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(getUsers());
+  //   dispatch(getEnum("/enum/task"));
+  //   dispatch(getEnum("/enum/task-status"));
+  // }, [dispatch]);
 
-  useEffect(() => {
-    setTask(
-      Object.values(enumsData.task).map((item: string, index: number) => {
-        return { id: index + 1, name: item };
-      })
-    );
-    setTaskStatus(
-      Object.values(enumsData.taskStatus).map((item: string, index: number) => {
-        return { id: index + 1, name: item };
-      })
-    );
-  }, [enumsData]);
+  // useEffect(() => {
+  //   setTask(
+  //     Object.values(enumsData.task).map((item: string, index: number) => {
+  //       return { id: index + 1, name: item };
+  //     })
+  //   );
+  //   setTaskStatus(
+  //     Object.values(enumsData.taskStatus).map((item: string, index: number) => {
+  //       return { id: index + 1, name: item };
+  //     })
+  //   );
+  // }, [enumsData]);
 
   const abc = () => {
     return data?.title ?? "test";
@@ -153,18 +153,18 @@ const FormTask = ({ data, id }: Props) => {
       userId: payload.user.id,
       responsibleId: payload.responsible.id,
     };
-    if (payload.id === 0) {
-      dispatch(setNewTask(sendPayload));
-    } else {
-      dispatch(setUpdateTask(sendPayload));
-    }
+    // if (payload.id === 0) {
+    //   dispatch(setNewTask(sendPayload));
+    // } else {
+    //   dispatch(setUpdateTask(sendPayload));
+    // }
     reset(defaultValues);
     setIsSave(true);
   };
 
-  useEffect(() => {
-    if (isSave && !saveLoading) dispatch(getTasks());
-  }, [dispatch, isSave, saveLoading]);
+  // useEffect(() => {
+  //   if (isSave && !saveLoading) dispatch(getTasks());
+  // }, [dispatch, isSave, saveLoading]);
 
   return (
     <>
@@ -253,7 +253,7 @@ const FormTask = ({ data, id }: Props) => {
                     onChange={(e: any) => {
                       onChange(e);
                     }}
-                    options={[...users]}
+                    // options={[...users]}
                     placeholder={"Users"}
                     getOptionLabel={(option: any) =>
                       option.firstName + " " + option.lastName
@@ -279,7 +279,7 @@ const FormTask = ({ data, id }: Props) => {
                     onChange={(e: any) => {
                       onChange(e);
                     }}
-                    options={[...users]}
+                    // options={[...users]}
                     placeholder={"Responsible"}
                     getOptionLabel={(option: any) =>
                       option.firstName + " " + option.lastName
@@ -292,13 +292,13 @@ const FormTask = ({ data, id }: Props) => {
             {errors.responsible && <>{errors.responsible.message}</>}
           </div>
           <div className="w-full md:w-2/2 px-1">
-            {saveLoading ? (
+            {/* {saveLoading ? (
               <>işleminiz yapılıyor</>
             ) : (
               <>
                 <button type="submit">Gönder</button>
               </>
-            )}
+            )} */}
           </div>
         </div>
       </form>

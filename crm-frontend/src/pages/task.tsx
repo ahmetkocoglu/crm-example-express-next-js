@@ -1,5 +1,5 @@
 import Menu from "@/components/menu";
-import { AppDispatch, RootState } from "@/store";
+// import { AppDispatch, RootState } from "@/store";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getTasks } from "@/store/apps/tasks";
@@ -7,10 +7,10 @@ import FormTask from "@/components/form-task";
 
 const NewMeeting = () => {
   // ** Redux **
-  const dispatch = useDispatch<AppDispatch>();
+  // const dispatch = useDispatch<AppDispatch>();
 
   // ** Selector **
-  const tasks: any[] = useSelector((state: RootState) => state.tasks.data);
+  // const tasks: any[] = useSelector((state: RootState) => state.tasks.data);
 
   // ** State **
   const [defaultValues, setDefaultValues] = useState({
@@ -35,9 +35,9 @@ const NewMeeting = () => {
     },
   });
 
-  useEffect(() => {
-    dispatch(getTasks());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(getTasks());
+  // }, [dispatch]);
 
   function handleEdit(task: any) {
     console.log('handleEdit >> ',task);
@@ -66,7 +66,7 @@ const NewMeeting = () => {
         <FormTask data={defaultValues} id={defaultValues.id} key={1} />
         <table className="table-auto w-full">
           <tbody>
-            {tasks.map((task: any, index: number) => {
+            {/* {tasks.map((task: any, index: number) => {
               return (
                 <tr key={index}>
                   <td>{task.title}</td>
@@ -84,7 +84,7 @@ const NewMeeting = () => {
                   </td>
                 </tr>
               );
-            })}
+            })} */}
           </tbody>
         </table>
       </div>

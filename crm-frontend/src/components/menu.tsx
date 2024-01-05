@@ -1,11 +1,11 @@
-import { RootState } from "@/store";
+// import { RootState } from "@/store";
 import Link from "next/link";
 import React from "react";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 
 const Menu = () => {
   // ** Selector
-  const isLogin: any = useSelector((state: RootState) => state.login.isLogin);
+  // const isLogin: any = useSelector((state: RootState) => state.login.isLogin);
 
   return (
     <nav className="bg-white border-gray-200 dark:bg-gray-900">
@@ -66,7 +66,7 @@ const Menu = () => {
                 Contact
               </Link>
             </li>
-            {!isLogin ? (
+            {/* {!isLogin ? (
               <li>
                 <Link
                   href="/login"
@@ -84,7 +84,7 @@ const Menu = () => {
                     Logout
                   </Link>
                 </li>
-              )}
+              )} */}
           </ul>
         </div>
       </div>
