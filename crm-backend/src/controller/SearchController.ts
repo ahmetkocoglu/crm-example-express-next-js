@@ -34,7 +34,7 @@ export class SearchController {
             }
         })
 
-        //return list
+        // return list
 
         return (await list).map((k: any) => {
             return {
