@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useDispatch, useSelector } from "react-redux";
-// import { AppDispatch, RootState } from "@/store";
+import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
-import { login } from "@/store/apps/login";
 import Input from "./input";
 import { useRouter } from "next/router";
 import { useLoginMutation } from "@/services/login";
+import { RootState } from "@/store";
 
 type FormValues = {
   email: string;
@@ -25,16 +24,10 @@ const defaultValues: FormValues = {
 };
 
 const Login = () => {
-  const [login] = useLoginMutation()
-  // ** Redux
-  // const dispatch = useDispatch<AppDispatch>();
-
-  // ** Selector
-  // const isLogin: any = useSelector((state: RootState) => state.login.isLogin);
-
+  const [login] = useLoginMutation();
+  
   // ** State
-  const [loginErrorMessage, setLoginErrorMessage] = useState("");
-  const [isOnSubmit, setIsOnSubmit] = useState(false);
+  const [loginError, setLoginError] = useState("")
 
   const {
     register,
@@ -50,26 +43,15 @@ const Login = () => {
   const router = useRouter();
 
   const onSubmit = (payload: FormValues) => {
-    // dispatch(login(payload));
     login(payload)
-            .unwrap()
-            .then((data) => {
-               console.log('login başarılı', data);
-            })
-            .catch(() =>{
-              console.log('Failed to login');
-            });
-    reset(defaultValues);
-    setIsOnSubmit(true);
+      .unwrap()
+      .then(() => {
+        router.push("/");
+      })
+      .catch((error) => {
+        setLoginError(error.data.message);
+      });
   };
-
-  // useEffect(() => {
-  //   if (isLogin) {
-  //     router.push("/");
-  //   } else {
-  //     if (isOnSubmit) setLoginErrorMessage("email ve/veya şifre geçersiz");
-  //   }
-  // }, [isLogin, isOnSubmit, router]);
 
   return (
     <>
@@ -96,7 +78,7 @@ const Login = () => {
             {errors.password && <>{errors.password.message}</>}
           </div>
           <div className="w-full md:w-2/2 px-1">
-            {loginErrorMessage}
+            <div>{loginError}</div>
             <button type="submit">Gönder</button>
           </div>
         </div>

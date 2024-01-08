@@ -35,6 +35,10 @@ export const appLoginSlice = createSlice({
         logout: (state: any) => {
             state.isLogin = false
             localStorage.removeItem('token')
+        },
+        setIsLogin: (state: any, action: any) => {
+            console.log('reducers >>> ');
+            
         }
     },
     extraReducers: builder => {
@@ -66,5 +70,5 @@ export const appLoginSlice = createSlice({
     }
 })
 
-export const { handleToken, logout } = appLoginSlice.actions
+export const { handleToken, logout, setIsLogin } = appLoginSlice.actions
 export default appLoginSlice.reducer

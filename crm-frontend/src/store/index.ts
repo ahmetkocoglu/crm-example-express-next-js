@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
 
+import tokenReducer from "./apps/login/token";
 import {  loginApi  } from "../services/login";
 
 export const store = configureStore({
     reducer: {
+        tokenState: tokenReducer,
         [loginApi.reducerPath]: loginApi.reducer,
     },
     middleware: (getDefaultMiddleware) => 
@@ -13,7 +15,8 @@ export const store = configureStore({
 
 setupListeners(store.dispatch)
 
-
+export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch
 
 
 
