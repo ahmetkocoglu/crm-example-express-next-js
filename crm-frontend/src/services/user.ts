@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { base } from '@/configs/base'
 import { user } from '@/configs/user'
+import { setUsers } from '@/store/apps/user'
 
 export const userApi = createApi({
     reducerPath: 'userApi',
@@ -16,7 +17,15 @@ export const userApi = createApi({
     }),
     endpoints: (builder) => ({
         getUsers: builder.query<any, string>({
-            query: (url) => `${url}`
+            query: (url) => `${url}`,
+            transformResponse: (result: { data: any }) => result,
+            async onQueryStarted(_args, { dispatch, queryFulfilled }) {
+                try {
+                    const { data } = await queryFulfilled;
+                    dispatch(setUsers(data.data))
+                } catch (error) {
+                }
+            }
         }),
         setUser: builder.mutation({
             query: (body) => ({

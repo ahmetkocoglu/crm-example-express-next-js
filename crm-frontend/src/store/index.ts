@@ -2,12 +2,14 @@ import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
 
 import tokenReducer from "./apps/login/token";
+import usersReducer from "./apps/user/index";
 import { loginApi } from "../services/login";
 import { userApi } from "../services/user";
 
 export const store = configureStore({
     reducer: {
         tokenState: tokenReducer,
+        usersState: usersReducer,
         [loginApi.reducerPath]: loginApi.reducer,
         [userApi.reducerPath]: userApi.reducer,
     },

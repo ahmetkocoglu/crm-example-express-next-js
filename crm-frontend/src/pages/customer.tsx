@@ -1,9 +1,6 @@
 import Menu from "@/components/menu";
 import { useGetUsersQuery } from "@/services/user";
-// import { AppDispatch, RootState } from '@/store'
-import { getUsers } from "@/store/apps/user";
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
 
 const Customer = () => {
   const { data, error, isLoading } = useGetUsersQuery("/users");
@@ -27,10 +24,10 @@ const Customer = () => {
           <tbody>
           {isLoading
         ? "Yükleniyor"
-        : data.data?.map((k: any) => {
+        : data.data?.map((k: any, i: number) => {
             return (
               <>
-              <tr>
+              <tr key={i}>
                 <td></td>
                 <td>
                   {k.firstName}
