@@ -5,6 +5,8 @@ import tokenReducer from "./apps/login/token";
 import usersReducer from "./apps/user/index";
 import { loginApi } from "../services/login";
 import { userApi } from "../services/user";
+import { enumsApi } from "../services/enums";
+import { taskApi } from "../services/task";
 
 export const store = configureStore({
     reducer: {
@@ -12,10 +14,12 @@ export const store = configureStore({
         usersState: usersReducer,
         [loginApi.reducerPath]: loginApi.reducer,
         [userApi.reducerPath]: userApi.reducer,
+        [enumsApi.reducerPath]: enumsApi.reducer,
+        [taskApi.reducerPath]: taskApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware().concat(
-            loginApi.middleware, userApi.middleware
+            loginApi.middleware, userApi.middleware, enumsApi.middleware, taskApi.middleware
         ),
 })
 

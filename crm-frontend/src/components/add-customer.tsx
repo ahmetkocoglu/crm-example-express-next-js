@@ -5,7 +5,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 // import { AppDispatch } from '@/store';
 import { useForm } from "react-hook-form";
 import Input from "./input";
-import { addUser } from "@/store/apps/user";
 import { useSetUserMutation } from "@/services/user";
 
 type FormValues = {
