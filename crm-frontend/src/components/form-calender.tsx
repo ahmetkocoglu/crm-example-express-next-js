@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Input from "./input";
@@ -12,12 +12,12 @@ import { RootState } from "@/store";
 
 type FormValues = {
   id?: number | 0;
-  type?: any;
+  calenderType?: any;
   title: string;
   description: string;
   traits?: Object;
   user?: any;
-  participants?: [];
+  participants?: any[];
 };
 
 const formSchema = yup.object().shape({
@@ -27,16 +27,14 @@ const formSchema = yup.object().shape({
 
 const defaultValues: FormValues = {
   id: 0,
-  type: {
-    id: 0,
-    name: "",
-  },
+  calenderType: "",
   title: "",
   description: "",
   user: {
     id: "",
     name: "",
   },
+  participants: []
 };
 
 type Props = {
@@ -68,33 +66,51 @@ const FormCalender = ({ data, id }: Props) => {
     resolver: yupResolver(formSchema),
   });
 
+  useEffect(() => {
+    console.log(data);
+    setValue("id", data?.id ?? 0);
+
+    setValue("title", data?.title ?? "");
+    setValue("description", data?.description ?? "");
+
+    setValue(
+      "calenderType",
+      calender?.data.find((k: any) => k.name === data?.calenderType)
+    );
+    console.log(data?.user);
+    
+    setValue("user", data?.user);
+    setValue("participants", data?.participants);
+  }, [data])
+  
+
   const onSubmit = (payload: FormValues) => {
     console.log("onSubmit payload >> ", payload);
 
-    const sendPayload = {
-      id: payload.id,
-      type: payload.type.name,
-      title: payload.title,
-      description: payload.description,
-      traits: { key: "value" },
-      userId: payload.user.id,
-      participants: payload.participants?.map((k: any) => {
-        return { id: k.id, name: k.firstName + " " + k.lastName };
-      }),
-    };
-    console.log("onSubmit sendPayload >> ", sendPayload);
+    // const sendPayload = {
+    //   id: payload.id,
+    //   calenderType: payload.calenderType,
+    //   title: payload.title,
+    //   description: payload.description,
+    //   traits: { key: "value" },
+    //   userId: payload.user.id,
+    //   participants: payload.participants?.map((k: any) => {
+    //     return { id: k.id, name: k.firstName + " " + k.lastName };
+    //   }),
+    // };
+    // console.log("onSubmit sendPayload >> ", sendPayload);
 
-    setIsSaveLoading(true);
+    // setIsSaveLoading(true);
 
-    setCalender(sendPayload)
-      .unwrap()
-      .then(() => {
-        setIsSaveLoading(false);
-        reset(defaultValues);
-      })
-      .catch(() => {
-        setIsSaveLoading(false);
-      });
+    // setCalender(sendPayload)
+    //   .unwrap()
+    //   .then(() => {
+    //     setIsSaveLoading(false);
+    //     reset(defaultValues);
+    //   })
+    //   .catch(() => {
+    //     setIsSaveLoading(false);
+    //   });
   };
 
   return (
@@ -122,7 +138,7 @@ const FormCalender = ({ data, id }: Props) => {
         </div>
         <div className="w-full md:w-1/2 px-1">
           <Controller
-            name={"type"}
+            name={"calenderType"}
             control={control}
             rules={{ required: true }}
             render={({ field: { value, onChange, onBlur } }) => {
@@ -135,14 +151,14 @@ const FormCalender = ({ data, id }: Props) => {
                     onChange(e);
                   }}
                   options={[...(calender?.data ?? [])]}
-                  placeholder={"Type"}
+                  placeholder={"Calender Type"}
                   getOptionLabel={(option: any) => option.name}
                   getOptionValue={(option: any) => option.id}
                 />
               );
             }}
           />
-          {errors.type && <>{errors.type.message}</>}
+          {errors.calenderType && <>{errors.calenderType.message}</>}
         </div>
         <div className="w-full md:w-1/2 px-1">
           <Controller
@@ -168,7 +184,7 @@ const FormCalender = ({ data, id }: Props) => {
               );
             }}
           />
-          {errors.type && <>{errors.type.message}</>}
+          {errors.user && <>{errors.user.message}</>}
         </div>
         <div className="w-full md:w-2/2 px-1">
           <Controller
@@ -195,7 +211,7 @@ const FormCalender = ({ data, id }: Props) => {
               );
             }}
           />
-          {errors.type && <>{errors.type.message}</>}
+          {errors.participants && <>{errors.participants.message}</>}
         </div>
         <div className="w-full md:w-2/2 px-1">
           {isSaveLoading ? (
