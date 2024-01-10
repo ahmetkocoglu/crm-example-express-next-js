@@ -1,10 +1,7 @@
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useDispatch, useSelector } from "react-redux";
-// import { AppDispatch, RootState } from "@/store";
+import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { getEnum } from "@/store/apps/enums";
-import { getTasks, setNewTask, setUpdateTask } from "@/store/apps/tasks";
 import { Controller, useForm } from "react-hook-form";
 import Input from "@/components/input";
 import Select from "react-select";
@@ -79,9 +76,6 @@ const FormTask = ({ data, id }: Props) => {
   const [isSaveLoading, setIsSaveLoading] = useState(false);
 
   useEffect(() => {
-    // console.log("useEffect >> ", data);
-    // console.log("useEffect ID >> ", id);
-
     setValue("id", data?.id ?? 0);
 
     setValue("title", data?.title ?? "");
