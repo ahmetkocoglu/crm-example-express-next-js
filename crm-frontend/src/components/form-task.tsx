@@ -11,6 +11,7 @@ import Select from "react-select";
 import { RootState } from "@/store";
 import { useGetUsersQuery } from "@/services/user";
 import { useGetTaskQuery } from "@/services/enums";
+import { useSetTaskMutation } from "@/services/task";
 
 type FormValues = {
   id?: number | 0;
@@ -65,37 +66,36 @@ type Props = {
 
 // const FormTask: React.FC<Props> = ({data}) => {
 const FormTask = ({ data, id }: Props) => {
-  const {  } = useGetUsersQuery("/users");
+  const [setTask] = useSetTaskMutation();
+
+  const {} = useGetUsersQuery("/users");
   const { data: task } = useGetTaskQuery("/enum/task");
   const { data: taskStatus } = useGetTaskQuery("/enum/task-status");
-  
+
   // ** Selector **
   const users = useSelector((state: RootState) => state.usersState.users);
- 
+
   // ** State **
-  const [isSave, setIsSave] = useState(false);  
+  const [isSaveLoading, setIsSaveLoading] = useState(false);
 
   useEffect(() => {
-    console.log("useEffect >> ", data);
-    console.log("useEffect ID >> ", id);
+    // console.log("useEffect >> ", data);
+    // console.log("useEffect ID >> ", id);
 
     setValue("id", data?.id ?? 0);
 
     setValue("title", data?.title ?? "");
     setValue("description", data?.description ?? "");
 
-    // setValue(
-    //   "type",
-    //   task.find((k: any) => k.name === data?.type?.name)
-    // );
-    // setValue(
-    //   "status",
-    //   taskStatus.find((k: any) => k.name === data?.status?.name)
-    // );
-
-    console.log(
-      "Fine User >> "
-      // users.find((k: any) => k.id === data?.user?.id)
+    console.log(task?.data, data?.type);
+    
+    setValue(
+      "type",
+      task?.data.find((k: any) => k.name === data?.type?.name)
+    );
+    setValue(
+      "status",
+      taskStatus?.data.find((k: any) => k.name === data?.status?.name)
     );
 
     setValue("user", data?.user);
@@ -126,18 +126,19 @@ const FormTask = ({ data, id }: Props) => {
       userId: payload.user.id,
       responsibleId: payload.responsible.id,
     };
-    // if (payload.id === 0) {
-    //   dispatch(setNewTask(sendPayload));
-    // } else {
-    //   dispatch(setUpdateTask(sendPayload));
-    // }
-    reset(defaultValues);
-    setIsSave(true);
-  };
 
-  // useEffect(() => {
-  //   if (isSave && !saveLoading) dispatch(getTasks());
-  // }, [dispatch, isSave, saveLoading]);
+    setIsSaveLoading(true)
+
+    setTask(sendPayload)
+      .unwrap()
+      .then(() => {
+        setIsSaveLoading(false)
+        reset(defaultValues);
+      })
+      .catch(() => {
+        setIsSaveLoading(false);
+      });
+  };
 
   return (
     <>
@@ -177,7 +178,7 @@ const FormTask = ({ data, id }: Props) => {
                     onChange={(e: any) => {
                       onChange(e);
                     }}
-                    options={[...task?.data ?? []]}
+                    options={[...(task?.data ?? [])]}
                     placeholder={"Type"}
                     getOptionLabel={(option: any) => option.name}
                     getOptionValue={(option: any) => option.id}
@@ -202,7 +203,7 @@ const FormTask = ({ data, id }: Props) => {
                     onChange={(e: any) => {
                       onChange(e);
                     }}
-                    options={[...taskStatus?.data ?? []]}
+                    options={[...(taskStatus?.data ?? [])]}
                     placeholder={"Task Status"}
                     getOptionLabel={(option: any) => option.name}
                     getOptionValue={(option: any) => option.id}
@@ -265,13 +266,13 @@ const FormTask = ({ data, id }: Props) => {
             {errors.responsible && <>{errors.responsible.message}</>}
           </div>
           <div className="w-full md:w-2/2 px-1">
-            {/* {saveLoading ? (
+            {isSaveLoading ? (
               <>işleminiz yapılıyor</>
             ) : (
               <>
                 <button type="submit">Gönder</button>
               </>
-            )} */}
+            )}
           </div>
         </div>
       </form>
