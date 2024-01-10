@@ -17,7 +17,7 @@ type FormValues = {
   description: string;
   traits?: Object;
   user?: any;
-  participants?: Number[];
+  participants?: [];
 };
 
 const formSchema = yup.object().shape({
@@ -45,7 +45,7 @@ type Props = {
 };
 
 const FormCalender = ({ data, id }: Props) => {
-  const [setTask] = useSetCalenderMutation();
+  const [setCalender] = useSetCalenderMutation();
 
   const {} = useGetUsersQuery("/users");
   const { data: calender } = useGetTaskQuery("/enum/calender");
@@ -69,29 +69,32 @@ const FormCalender = ({ data, id }: Props) => {
   });
 
   const onSubmit = (payload: FormValues) => {
-    console.log("onSubmit >> ", payload);
+    console.log("onSubmit payload >> ", payload);
 
-    // const sendPayload = {
-    //   id: payload.id,
-    //   type: payload.type.name,
-    //   title: payload.title,
-    //   description: payload.description,
-    //   status: payload.status?.name ?? "appointed",
-    //   userId: payload.user.id,
-    //   responsibleId: payload.responsible.id,
-    // };
+    const sendPayload = {
+      id: payload.id,
+      type: payload.type.name,
+      title: payload.title,
+      description: payload.description,
+      traits: { key: "value" },
+      userId: payload.user.id,
+      participants: payload.participants?.map((k: any) => {
+        return { id: k.id, name: k.firstName + " " + k.lastName };
+      }),
+    };
+    console.log("onSubmit sendPayload >> ", sendPayload);
 
-    // setIsSaveLoading(true);
+    setIsSaveLoading(true);
 
-    // setTask(sendPayload)
-    //   .unwrap()
-    //   .then(() => {
-    //     setIsSaveLoading(false);
-    //     reset(defaultValues);
-    //   })
-    //   .catch(() => {
-    //     setIsSaveLoading(false);
-    //   });
+    setCalender(sendPayload)
+      .unwrap()
+      .then(() => {
+        setIsSaveLoading(false);
+        reset(defaultValues);
+      })
+      .catch(() => {
+        setIsSaveLoading(false);
+      });
   };
 
   return (
@@ -157,6 +160,33 @@ const FormCalender = ({ data, id }: Props) => {
                   }}
                   options={[...users]}
                   placeholder={"Users"}
+                  getOptionLabel={(option: any) =>
+                    option.firstName + " " + option.lastName
+                  }
+                  getOptionValue={(option: any) => option.id}
+                />
+              );
+            }}
+          />
+          {errors.type && <>{errors.type.message}</>}
+        </div>
+        <div className="w-full md:w-2/2 px-1">
+          <Controller
+            name={"participants"}
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { value, onChange, onBlur } }) => {
+              return (
+                <Select
+                  className="text-black"
+                  value={value}
+                  onBlur={onBlur}
+                  isMulti={true}
+                  onChange={(e: any) => {
+                    onChange(e);
+                  }}
+                  options={[...users]}
+                  placeholder={"Participants"}
                   getOptionLabel={(option: any) =>
                     option.firstName + " " + option.lastName
                   }
