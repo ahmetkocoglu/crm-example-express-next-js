@@ -3,7 +3,7 @@ import { base } from '@/configs/base'
 import { calender } from '@/configs/calender'
 
 export const calenderApi = createApi({
-    reducerPath: 'baseApi',
+    reducerPath: 'calenderApi',
     baseQuery: fetchBaseQuery({
         baseUrl: base.base,
         prepareHeaders: (headers, { getState, endpoint }) => {

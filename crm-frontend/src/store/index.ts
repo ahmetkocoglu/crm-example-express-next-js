@@ -7,6 +7,7 @@ import { loginApi } from "../services/login";
 import { userApi } from "../services/user";
 import { enumsApi } from "../services/enums";
 import { taskApi } from "../services/task";
+import { calenderApi } from "../services/calender"
 
 export const store = configureStore({
     reducer: {
@@ -16,10 +17,15 @@ export const store = configureStore({
         [userApi.reducerPath]: userApi.reducer,
         [enumsApi.reducerPath]: enumsApi.reducer,
         [taskApi.reducerPath]: taskApi.reducer,
+        [calenderApi.reducerPath]: calenderApi.reducer
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware().concat(
-            loginApi.middleware, userApi.middleware, enumsApi.middleware, taskApi.middleware
+            loginApi.middleware, 
+            userApi.middleware, 
+            enumsApi.middleware, 
+            taskApi.middleware,
+            calenderApi.middleware
         ),
 })
 
