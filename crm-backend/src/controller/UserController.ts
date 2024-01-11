@@ -93,35 +93,36 @@ export class UserController {
 
         try {
             const insert = await this.userRepository.save(user);
+            const userId = insert.id
 
             const newEmail = Object.assign(new Email(), {
                 emailType: emailType,
                 emailAddress: email,
-                user
+                user: userId
             })
 
-            const insertEmail = await this.phoneRepository.save(newEmail)
+            await this.emailRepository.save(newEmail)
 
             const newPhone = Object.assign(new Phone(), {
                 phoneType: phoneType,
                 phoneNumber: phone,
-                user
+                user: userId
             })
 
-            const insertPhone = await this.addressRepository.save(newPhone)
+            await this.phoneRepository.save(newPhone)
 
             const newAddress = Object.assign(new Address(), {
                 addressType,
                 addressLine,
                 location,
-                user,
+                user: userId,
                 country,
                 city,
                 district,
                 town
             })
 
-            const insertAddress = await this.addressRepository.save(newAddress)
+            await this.addressRepository.save(newAddress)
             
             return { data: {
                 firstName: insert.firstName,
