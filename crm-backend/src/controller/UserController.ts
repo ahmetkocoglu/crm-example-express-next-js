@@ -4,10 +4,16 @@ import { User } from "../entity/User"
 import { UserModel } from "../model/UserModel"
 import { RegisterModel } from "../model/RegisterModel"
 import { BaseUserModel } from "../model/BaseUserModel"
+import { Email } from "../entity/Email"
+import { Phone } from "../entity/Phone"
+import { Address } from "../entity/Address"
 
 export class UserController {
 
     private userRepository = AppDataSource.getRepository(User)
+    private emailRepository = AppDataSource.getRepository(Email)
+    private phoneRepository = AppDataSource.getRepository(Phone)
+    private addressRepository = AppDataSource.getRepository(Address)
 
     async all(request: Request, response: Response, next: NextFunction) {
         const users: Array<UserModel> = (await this.userRepository.find()).map((k: UserModel) => {
@@ -62,7 +68,21 @@ export class UserController {
     }
 
     async newUser(request: Request, response: Response, next: NextFunction) {
-        const { firstName, lastName, email }: BaseUserModel = request.body;
+        const { 
+            firstName, 
+            lastName, 
+            email,
+            emailType,
+            phone,
+            phoneType,
+            addressType,
+            addressLine,
+            location,
+            country,
+            city,
+            district,
+            town
+        } = request.body;
 
         const user = Object.assign(new User(), {
             firstName,
@@ -73,6 +93,36 @@ export class UserController {
 
         try {
             const insert = await this.userRepository.save(user);
+
+            const newEmail = Object.assign(new Email(), {
+                emailType: emailType,
+                emailAddress: email,
+                user
+            })
+
+            const insertEmail = await this.phoneRepository.save(newEmail)
+
+            const newPhone = Object.assign(new Phone(), {
+                phoneType: phoneType,
+                phoneNumber: phone,
+                user
+            })
+
+            const insertPhone = await this.addressRepository.save(newPhone)
+
+            const newAddress = Object.assign(new Address(), {
+                addressType,
+                addressLine,
+                location,
+                user,
+                country,
+                city,
+                district,
+                town
+            })
+
+            const insertAddress = await this.addressRepository.save(newAddress)
+            
             return { data: {
                 firstName: insert.firstName,
                 lastName: insert.lastName,

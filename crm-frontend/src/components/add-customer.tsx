@@ -21,6 +21,9 @@ type FormValues = {
   addressLine?: string;
   location?: string;
   country?: string;
+  city?: string;
+  district?: string;
+  town?: string;
 };
 
 const loginFormSchema = yup.object().shape({
@@ -39,7 +42,10 @@ const defaultValues: FormValues = {
   addressType: "",
   addressLine: "",
   location: "",
-  country: ""
+  country: "",
+  city: "",
+  district: "",
+  town: "",
 };
 
 const AddCustomer = () => {
@@ -49,6 +55,9 @@ const AddCustomer = () => {
   const [setUser] = useSetUserMutation();
   // ** State
   const [loading, setLoading] = useState(false);
+  const [cities, setCities] = useState([]);
+  const [district, setDistrict] = useState([])
+  const [town, setTown] = useState([])
 
   const {
     register,
@@ -61,9 +70,26 @@ const AddCustomer = () => {
     resolver: yupResolver(loginFormSchema),
   });
 
-  const onSubmit = (payload: FormValues) => {
+  const onSubmit = (payload: any) => {
+    const sendPayload = {
+      firstName: payload.firstName,
+      lastName: payload.lastName,
+      email: payload.email,
+      emailType: payload.emailType.id,
+      phone: payload.phone,
+      phoneType: payload.phoneType.id,
+      addressType: payload.addressType.id,
+      addressLine: payload.addressLine,
+      location: payload.location,
+      country: payload.country.id,
+      city: payload.city.id,
+      district: payload.district.id,
+      town: payload.town.id
+    } as FormValues
+    
     setLoading(true);
-    setUser(payload)
+    
+    setUser(sendPayload)
       .unwrap()
       .then(() => {
         console.log("User added");
@@ -216,39 +242,114 @@ const AddCustomer = () => {
               </div>
             </div>
             <div className="w-full md:w-1/5 px-1">
-            <Input
-                    type="text"
-                    placeholder="location"
-                    className="mt-1"
-                    rounded="rounded-2xl"
-                    {...register("location", { required: true })}
-                  />
-                  {errors.location && <>{errors.location.message}</>}
+              <Input
+                type="text"
+                placeholder="location"
+                className="mt-1"
+                rounded="rounded-2xl"
+                {...register("location", { required: true })}
+              />
+              {errors.location && <>{errors.location.message}</>}
             </div>
             <div className="w-full md:w-1/5">
-                  <Controller
-                    name={"country"}
-                    control={control}
-                    rules={{ required: true }}
-                    render={({ field: { value, onChange, onBlur } }) => {
-                      return (
-                        <ReactSelect
-                          className="pt-1.5 text-black"
-                          value={value}
-                          onBlur={onBlur}
-                          onChange={(e: any) => {
-                            onChange(e);
-                          }}
-                          options={[...countries]}
-                          placeholder={"Country"}
-                          getOptionLabel={(option: any) => option.name}
-                          getOptionValue={(option: any) => option.id}
-                        />
-                      );
-                    }}
-                  />
-                  {errors.country && <>{errors.country.message}</>}
-                </div>
+              <Controller
+                name={"country"}
+                control={control}
+                rules={{ required: true }}
+                render={({ field: { value, onChange, onBlur } }) => {
+                  return (
+                    <ReactSelect
+                      className="pt-1.5 text-black"
+                      value={value}
+                      onBlur={onBlur}
+                      onChange={(e: any) => {
+                        setCities(e.city);
+                        onChange(e);
+                      }}
+                      options={[...(countries ?? [])]}
+                      placeholder={"Country"}
+                      getOptionLabel={(option: any) => option.name}
+                      getOptionValue={(option: any) => option.id}
+                    />
+                  );
+                }}
+              />
+              {errors.country && <>{errors.country.message}</>}
+            </div>
+            <div className="w-full md:w-1/5">
+              <Controller
+                name={"city"}
+                control={control}
+                rules={{ required: true }}
+                render={({ field: { value, onChange, onBlur } }) => {
+                  return (
+                    <ReactSelect
+                      className="pt-1.5 text-black"
+                      value={value}
+                      onBlur={onBlur}
+                      onChange={(e: any) => {
+                        setDistrict(e.district)
+                        onChange(e);
+                      }}
+                      options={[...(cities ?? [])]}
+                      placeholder={"City"}
+                      getOptionLabel={(option: any) => option.name}
+                      getOptionValue={(option: any) => option.id}
+                    />
+                  );
+                }}
+              />
+              {errors.city && <>{errors.city.message}</>}
+            </div>
+            <div className="w-full md:w-1/5">
+              <Controller
+                name={"district"}
+                control={control}
+                rules={{ required: true }}
+                render={({ field: { value, onChange, onBlur } }) => {
+                  return (
+                    <ReactSelect
+                      className="pt-1.5 text-black"
+                      value={value}
+                      onBlur={onBlur}
+                      onChange={(e: any) => {
+                        setTown(e.town)
+                        onChange(e);
+                      }}
+                      options={[...(district ?? [])]}
+                      placeholder={"District"}
+                      getOptionLabel={(option: any) => option.name}
+                      getOptionValue={(option: any) => option.id}
+                    />
+                  );
+                }}
+              />
+              {errors.district && <>{errors.district.message}</>}
+            </div>
+            <div className="w-full md:w-1/5">
+              <Controller
+                name={"town"}
+                control={control}
+                rules={{ required: true }}
+                render={({ field: { value, onChange, onBlur } }) => {
+                  return (
+                    <ReactSelect
+                      className="pt-1.5 text-black"
+                      value={value}
+                      onBlur={onBlur}
+                      onChange={(e: any) => {
+                        onChange(e);
+                      }}
+                      options={[...(town ?? [])]}
+                      placeholder={"Town"}
+                      getOptionLabel={(option: any) => option.name}
+                      getOptionValue={(option: any) => option.id}
+                    />
+                  );
+                }}
+              />
+              {errors.town && <>{errors.town.message}</>}
+            </div>
             <div className="w-full md:w-1/1 px-5 text-end">
               <button type="submit" disabled={loading}>
                 {loading ? "işleminiz yapılıyor" : "Gönder"}

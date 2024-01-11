@@ -11,6 +11,21 @@ export class CountryController {
     async all(request: Request, response: Response, next: NextFunction) {
         return this.countryRepository.find({
             relations: {
+                city: {
+                    district: {
+                        town: true,
+                    }
+                }
+            },
+            order: {
+                name: 'ASC',
+            }
+        })
+    }
+
+    async allAddress(request: Request, response: Response, next: NextFunction) {
+        return this.countryRepository.find({
+            relations: {
                 address: true,
                 city: {
                     district: {
