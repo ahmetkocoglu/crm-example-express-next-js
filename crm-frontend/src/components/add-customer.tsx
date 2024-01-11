@@ -3,14 +3,24 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 // import { useDispatch } from 'react-redux';
 // import { AppDispatch } from '@/store';
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import Input from "./input";
 import { useSetUserMutation } from "@/services/user";
+import { useGetContactEnumQuery } from "@/services/enums";
+import ReactSelect from "react-select";
+import { useGetCountryQuery } from "@/services/country";
 
 type FormValues = {
   firstName: string;
   lastName: string;
   email: string;
+  emailType?: string;
+  phone?: string;
+  phoneType?: string;
+  addressType?: string;
+  addressLine?: string;
+  location?: string;
+  country?: string;
 };
 
 const loginFormSchema = yup.object().shape({
@@ -23,12 +33,22 @@ const defaultValues: FormValues = {
   firstName: "",
   lastName: "",
   email: "",
+  emailType: "",
+  phone: "",
+  phoneType: "",
+  addressType: "",
+  addressLine: "",
+  location: "",
+  country: ""
 };
 
 const AddCustomer = () => {
+  const { data: contact } = useGetContactEnumQuery("/enum/contact");
+  const { data: countries } = useGetCountryQuery("/country");
+
   const [setUser] = useSetUserMutation();
   // ** State
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -42,26 +62,26 @@ const AddCustomer = () => {
   });
 
   const onSubmit = (payload: FormValues) => {
-    setLoading(true)
+    setLoading(true);
     setUser(payload)
       .unwrap()
       .then(() => {
         console.log("User added");
-        setLoading(false)
+        setLoading(false);
       })
       .catch((error) => {
         console.log("Failed to add user");
-        setLoading(false)
+        setLoading(false);
       });
     reset(defaultValues);
   };
 
   return (
     <>
-      <main className="max-w-2xl mx-auto">
+      <main className="container mx-auto">
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex flex-wrap -mx-4 py-28 gap-y-2">
-            <div className="w-full md:w-1/1 px-1">
+          <div className="flex flex-wrap gap-y-2">
+            <div className="w-full md:w-1/3 px-1">
               <Input
                 type="text"
                 placeholder="First Name"
@@ -71,7 +91,7 @@ const AddCustomer = () => {
               />
               {errors.firstName && <>{errors.firstName.message}</>}
             </div>
-            <div className="w-full md:w-1/1 px-1">
+            <div className="w-full md:w-1/3 px-1">
               <Input
                 type="text"
                 placeholder="Last Name"
@@ -81,18 +101,158 @@ const AddCustomer = () => {
               />
               {errors.lastName && <>{errors.lastName.message}</>}
             </div>
-            <div className="w-full md:w-1/1 px-1">
-              <Input
-                type="text"
-                placeholder="Email"
-                className="mt-1"
-                rounded="rounded-2xl"
-                {...register("email", { required: true })}
-              />
-              {errors.email && <>{errors.email.message}</>}
+            <div className="w-full md:w-1/3 px-1">
+              <div className="flex flex-wrap -mx-4">
+                <div className="w-full md:w-1/2">
+                  <Controller
+                    name={"emailType"}
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field: { value, onChange, onBlur } }) => {
+                      return (
+                        <ReactSelect
+                          className="pt-1.5 text-black"
+                          value={value}
+                          onBlur={onBlur}
+                          onChange={(e: any) => {
+                            onChange(e);
+                          }}
+                          options={[...(contact?.data ?? [])]}
+                          placeholder={"Email Type"}
+                          getOptionLabel={(option: any) => option.name}
+                          getOptionValue={(option: any) => option.id}
+                        />
+                      );
+                    }}
+                  />
+                  {errors.emailType && <>{errors.emailType.message}</>}
+                </div>
+                <div className="w-full md:w-1/2">
+                  <Input
+                    type="text"
+                    placeholder="Email"
+                    className="mt-1"
+                    rounded="rounded-2xl"
+                    {...register("email", { required: true })}
+                  />
+                  {errors.email && <>{errors.email.message}</>}
+                </div>
+              </div>
             </div>
+            <div className="w-full md:w-1/3 px-1">
+              <div className="flex flex-wrap -mx-4">
+                <div className="w-full md:w-1/2">
+                  <Controller
+                    name={"phoneType"}
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field: { value, onChange, onBlur } }) => {
+                      return (
+                        <ReactSelect
+                          className="pt-1.5 text-black"
+                          value={value}
+                          onBlur={onBlur}
+                          onChange={(e: any) => {
+                            onChange(e);
+                          }}
+                          options={[...(contact?.data ?? [])]}
+                          placeholder={"Phone Type"}
+                          getOptionLabel={(option: any) => option.name}
+                          getOptionValue={(option: any) => option.id}
+                        />
+                      );
+                    }}
+                  />
+                  {errors.phoneType && <>{errors.phoneType.message}</>}
+                </div>
+                <div className="w-full md:w-1/2">
+                  <Input
+                    type="text"
+                    placeholder="Phone"
+                    className="mt-1"
+                    rounded="rounded-2xl"
+                    {...register("phone", { required: true })}
+                  />
+                  {errors.phone && <>{errors.phone.message}</>}
+                </div>
+              </div>
+            </div>
+            <div className="w-full md:w-2/3 px-1">
+              <div className="flex flex-wrap -mx-4">
+                <div className="w-full md:w-1/4">
+                  <Controller
+                    name={"addressType"}
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field: { value, onChange, onBlur } }) => {
+                      return (
+                        <ReactSelect
+                          className="pt-1.5 text-black"
+                          value={value}
+                          onBlur={onBlur}
+                          onChange={(e: any) => {
+                            onChange(e);
+                          }}
+                          options={[...(contact?.data ?? [])]}
+                          placeholder={"Adress Type"}
+                          getOptionLabel={(option: any) => option.name}
+                          getOptionValue={(option: any) => option.id}
+                        />
+                      );
+                    }}
+                  />
+                  {errors.addressType && <>{errors.addressType.message}</>}
+                </div>
+                <div className="w-full md:w-3/4">
+                  <Input
+                    type="text"
+                    placeholder="Adress Line"
+                    className="mt-1"
+                    rounded="rounded-2xl"
+                    {...register("addressLine", { required: true })}
+                  />
+                  {errors.addressLine && <>{errors.addressLine.message}</>}
+                </div>
+              </div>
+            </div>
+            <div className="w-full md:w-1/5 px-1">
+            <Input
+                    type="text"
+                    placeholder="location"
+                    className="mt-1"
+                    rounded="rounded-2xl"
+                    {...register("location", { required: true })}
+                  />
+                  {errors.location && <>{errors.location.message}</>}
+            </div>
+            <div className="w-full md:w-1/5">
+                  <Controller
+                    name={"country"}
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field: { value, onChange, onBlur } }) => {
+                      return (
+                        <ReactSelect
+                          className="pt-1.5 text-black"
+                          value={value}
+                          onBlur={onBlur}
+                          onChange={(e: any) => {
+                            onChange(e);
+                          }}
+                          options={[...countries]}
+                          placeholder={"Country"}
+                          getOptionLabel={(option: any) => option.name}
+                          getOptionValue={(option: any) => option.id}
+                        />
+                      );
+                    }}
+                  />
+                  {errors.country && <>{errors.country.message}</>}
+                </div>
             <div className="w-full md:w-1/1 px-5 text-end">
-              <button type="submit" disabled={loading}>{loading ? 'işleminiz yapılıyor' : 'Gönder'}</button>
+              <button type="submit" disabled={loading}>
+                {loading ? "işleminiz yapılıyor" : "Gönder"}
+              </button>
             </div>
           </div>
         </form>

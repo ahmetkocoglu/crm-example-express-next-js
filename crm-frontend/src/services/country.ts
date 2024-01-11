@@ -1,8 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { base } from '@/configs/base'
 
-export const enumsApi = createApi({
-    reducerPath: 'enumsApi',
+export const countryApi = createApi({
+    reducerPath: 'countryApi',
     baseQuery: fetchBaseQuery({
         baseUrl: base.base,
         prepareHeaders: (headers, { getState, endpoint }) => {
@@ -14,15 +14,9 @@ export const enumsApi = createApi({
         },
     }),
     endpoints: (builder) => ({
-        getTask: builder.query<any, string>({
-            query: (url) => `${url}`
-        }),
-        getTaskStatus: builder.query<any, string>({
-            query: (url) => `${url}`
-        }),
-        getContactEnum: builder.query<any, string>({
+        getCountry: builder.query<any, string>({
             query: (url) => `${url}`
         }),
     }),
 })
-export const { useGetTaskQuery, useGetTaskStatusQuery, useGetContactEnumQuery } = enumsApi
+export const { useGetCountryQuery } = countryApi

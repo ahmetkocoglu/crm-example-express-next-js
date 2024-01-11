@@ -1,3 +1,4 @@
+import AddCustomer from "@/components/add-customer";
 import Menu from "@/components/menu";
 import { useGetUsersQuery } from "@/services/user";
 import React from "react";
@@ -8,7 +9,7 @@ const Customer = () => {
   return (
     <>
       <Menu />
-      <div>Müşteriler Sayfası</div>
+      <AddCustomer/>
       <div className="overflow-x-auto">
         <table className="table">
           {/* head */}
